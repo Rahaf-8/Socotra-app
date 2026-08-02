@@ -11,8 +11,9 @@ import { siteSettingsPlaceholder } from "@/config/site-settings";
 import { isLocale } from "@/i18n/config";
 import { getGalleryContent } from "@/i18n/content/gallery";
 import { getHomeContent } from "@/i18n/content/home";
-import { getTours, getTourUI } from "@/i18n/content/tours";
+import { getTourUI } from "@/i18n/content/tours";
 import { languageAlternates } from "@/i18n/routing";
+import { getPublishedTours } from "@/lib/tours/tour-repository";
 
 type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -26,7 +27,7 @@ export default async function Home({ params }: Props) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const content = getHomeContent(locale, siteSettingsPlaceholder.contact.whatsappUrl);
-  const tours = getTours(locale).filter((tour) => tour.featured && tour.published).sort((a,b) => a.displayOrder-b.displayOrder);
+  const tours = (await getPublishedTours(locale)).filter((tour) => tour.featured);
   const labels = getTourUI(locale).labels;
   const gallery = getGalleryContent(locale).items.filter((item) => item.published).sort((a,b) => a.displayOrder-b.displayOrder).slice(0,6);
   return (

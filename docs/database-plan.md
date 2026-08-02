@@ -1022,3 +1022,11 @@ Supported locale validation remains an application-level allowlist (`en`, `ar`) 
 Administrator records are never part of the content seed. `ADMIN_NAME`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` are temporary bootstrap inputs only and must be removed after running `npm run admin:create`. The SQLite database remains local development infrastructure. Production requires a persistent database migration, a fresh production client account, authentication revalidation, secure secrets, logging/monitoring, and optional MFA planning.
 
 `AUTH_SECRET` is a runtime secret and must differ by environment. `AUTH_TRUST_HOST=true` is used only where the deployment platform/proxy provides a trusted `Host` header; it must be reviewed with the final hosting configuration.
+
+## Tours operational writes
+
+The existing Tour, translation, pricing, list-item, itinerary, image, status, and relation models support Tours CRUD without another schema migration. `Tour.status` is the visibility source of truth: only `published` records resolve publicly, while `draft` and `archived` records remain available to administrators.
+
+Owned nested records cascade from Tour. `BookingRequest.tourId` remains `onDelete: Restrict`. The administrator deletion action checks booking references first: unreferenced Tours may be hard-deleted; referenced Tours are archived and unfeatured. Create/update replaces the complete allow-listed nested collection inside one transaction, so failures cannot leave partial bilingual data.
+
+The deterministic seed is for new local environments and verification. It overwrites the three seeded Tour IDs and must not run as routine content synchronization after production administrators begin managing content.

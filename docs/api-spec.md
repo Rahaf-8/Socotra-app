@@ -1053,3 +1053,9 @@ The Prisma database foundation and deterministic bilingual seed are implemented,
 `/api/auth/[...nextauth]` is the only authentication route handler and is owned by Auth.js. Administrator login uses credentials only; there is no sign-up, social OAuth, magic link, or public password-reset endpoint. `/admin/change-password` verifies and updates credentials through a server action, then revokes sessions and signs the administrator out.
 
 No content, Contact, Booking, upload, email, or payment API is introduced by the authentication foundation. Future admin APIs must enforce the server-only database-backed administrator authorization boundary. Production hardening still includes shared rate limiting, security monitoring, a reviewed CSP strategy, and optional MFA.
+
+## Tours administration operations
+
+Tours CRUD uses authenticated Server Actions rather than new public business APIs. Every mutation calls `requireAdmin()`, validates an explicit Zod payload, and executes nested writes transactionally. Slugs are normalized and unique; image references accept safe project-local paths or the already approved HTTPS image host only.
+
+Successful writes revalidate `/admin/tours`, `/admin/dashboard`, both locale home/tours/booking routes, affected detail routes, and the sitemap path. No global cache disable, upload endpoint, payment endpoint, or unrelated content API is included.

@@ -16,7 +16,10 @@ export default async function ProtectedAdminLayout({ children }: { children: Rea
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-ocean-light lg:mt-6">Website Admin</p>
       </div>
       <nav aria-label="Administrator" className="mt-5 lg:mt-10">
-        <Link href="/admin/dashboard" className="block rounded-xl bg-white/10 px-4 py-3 font-semibold transition hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Dashboard</Link>
+        <div className="space-y-2">
+          <Link href="/admin/dashboard" className="block rounded-xl bg-white/10 px-4 py-3 font-semibold transition hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Dashboard</Link>
+          <Link href="/admin/tours" className="block rounded-xl px-4 py-3 font-semibold transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Tours</Link>
+        </div>
       </nav>
       <div className="mt-6 border-t border-white/15 pt-5 lg:mt-12">
         <p className="truncate font-semibold">{admin.name}</p>

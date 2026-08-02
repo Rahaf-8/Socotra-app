@@ -972,7 +972,7 @@ Shared components are not duplicated by language. Server routes select localized
 
 ## 21. Database Foundation Boundary
 
-The Prisma schema, migration, generated client, and deterministic seed now exist, but the public frontend intentionally remains on the existing typed static adapters. A later task may introduce domain repositories that map Prisma entities plus one requested translation into the current component DTOs. No page, Server Component, form service, or Client Component should query Prisma directly, and no mixed static/database fallback should be introduced during that migration.
+The Prisma schema, migration, generated client, and deterministic seed exist. Tours now use a server-only repository that maps Prisma entities plus one requested translation into the established public DTO; other public content domains remain on typed static adapters. Client Components must never query Prisma directly, and mixed static/database fallback is not used.
 ## Admin authentication boundary
 
 - `src/auth.ts` configures the credentials provider and minimal JWT session claims.
@@ -982,3 +982,12 @@ The Prisma schema, migration, generated client, and deterministic seed now exist
 - `/admin/dashboard` is read-only and reports real database counts; no management links or CRUD components exist yet.
 
 Future admin Server Actions and Route Handlers must call the same authorization boundary before sensitive reads or mutations.
+
+### Tours CRUD boundary
+
+- `src/lib/tours/tour-repository.ts` owns public published queries, admin reads, and conversion to the public `Tour` view model.
+- `src/lib/validation/tour-admin.ts` defines the allow-listed bilingual and nested Zod payload.
+- `src/lib/actions/tour-admin.ts` authorizes, validates, writes owned relations in one transaction, and revalidates affected routes.
+- `src/components/admin/tours/tour-form.tsx` uses React Hook Form for the structured editor.
+
+Public Tour components remain presentation-focused. Missing locale translations and non-published Tours are never returned publicly.

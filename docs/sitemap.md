@@ -824,5 +824,8 @@ The language switcher replaces only the first locale segment and preserves the r
 - `/admin/change-password` — mandatory first-login password change
 - `/admin` — protected redirect to the dashboard
 - `/admin/dashboard` — protected read-only database overview
+- `/admin/tours` — protected Tour list and safe deletion/archive controls
+- `/admin/tours/new` — protected bilingual Tour creation
+- `/admin/tours/[tourId]/edit` — protected shared and bilingual Tour editor
 
 Admin routes are outside locale routing, use no public Navbar/Footer, are marked `noindex, nofollow`, and are excluded from the public sitemap and navigation.

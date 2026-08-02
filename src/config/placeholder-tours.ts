@@ -137,14 +137,14 @@ export const placeholderTours = [
   },
   {
     ...common, id: "package-3-comfy-tour", slug: "comfy-tour", packageLabel: "Package 3", title: "Comfy Tour", tourType: "Private or Family Tour",
-    shortDescription: "A more comfortable way to discover Socotra, with accommodation in one of the best available hotels on the island every night.",
-    fullDescription: "This package is designed for private travelers, couples and families who want to explore Socotra while returning to comfortable hotel accommodation each night.",
-    accommodationNote: "Hotels in Socotra should not be compared with international luxury hotel standards. The best available accommodation is generally comfortable, clean and practical, with facilities such as air conditioning, running water, hot water, acceptable Wi-Fi, a comfortable bed and clean sheets where available.",
+    shortDescription: "A more comfortable way to discover Socotra, combining camping with selected guesthouse or hotel stays.",
+    fullDescription: "This package is designed for private travelers, couples and families who want to explore Socotra with camping on most nights and guesthouse or hotel accommodation on arrival, departure and midway through the trip.",
+    accommodationNote: "The Comfy experience includes camping on most nights. A guesthouse or hotel is used on arrival, departure and midway through the trip. Hotels in Socotra should not be compared with international luxury hotel standards; the best available accommodation is generally comfortable, clean and practical, with air conditioning, running water, hot water, acceptable Wi-Fi, a comfortable bed and clean sheets where available.",
     pricingTiers: tiers("comfy", [1985, 1695, 1490, 1230]), included: comfyIncluded, itinerary: comfyItinerary, displayOrder: 3,
     needsClientConfirmation: true,
-    internalContentNotes: ["Camping equipment conflicted with hotel-every-night positioning and is excluded pending confirmation.", "Day 2 overnight in Darho village may conflict with hotel-every-night positioning.", "Additional isolated itinerary days appear to belong to another version and are not published."],
-    seoTitle: "Socotra Comfy Tour | Private Hotel-Based Journey",
-    seoDescription: "Explore Socotra on an 8-day private hotel-based journey for couples and families.",
+    internalContentNotes: ["Additional isolated itinerary days appear to belong to another version and are not published."],
+    seoTitle: "Socotra Comfy Tour | Private 8-Day Journey",
+    seoDescription: "Explore Socotra on an 8-day private journey combining camping with selected guesthouse or hotel stays.",
   },
 ] satisfies readonly Tour[];
 

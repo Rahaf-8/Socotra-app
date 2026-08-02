@@ -1092,3 +1092,9 @@ Unconfirmed ideas remain out of scope until formally approved.
 The private, English-only administrator area lives at `/admin`, outside the public `/en` and `/ar` route trees. Auth.js `5.0.0-beta.32` provides credentials authentication and JWT sessions; every protected server layout/action revalidates the administrator against Prisma. There is no public registration, content CRUD, Contact/Booking connection, or payment functionality.
 
 Administrators are created explicitly with `npm run admin:create` and reset with `npm run admin:reset-password`. Client and developer access must use separate accounts. Local SQLite accounts are development-only; the final client account must be created separately against the future persistent production database and handed over through a secure channel.
+
+## Tours administration
+
+Tours are the first database-managed public content domain. Protected routes at `/admin/tours`, `/admin/tours/new`, and `/admin/tours/[tourId]/edit` manage shared business fields, English and Arabic translations, prices, itinerary days, included/excluded/required-extra records, image records, ordering, featured state, and publication status.
+
+Public Home featured tours, Tours listing/details, and Booking package options read published records through a server-only Prisma repository. Mutations are transactional and revalidate both locale home/list/detail/booking paths plus the admin list/dashboard. Image management is record-only; no upload or storage integration exists. Static bilingual Tour modules remain deterministic seed input, not the public runtime source.
