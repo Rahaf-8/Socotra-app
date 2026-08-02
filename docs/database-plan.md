@@ -2,11 +2,11 @@
 
 ## 1. Purpose and Status
 
-This document proposes a maintainable Version 1 relational data model for the confirmed Socotra tourism website requirements. It is an architecture plan only; it does not modify or prescribe executable Prisma schema syntax.
+This document describes the maintainable Version 1 relational data model for the confirmed Socotra tourism website requirements. The database foundation is now implemented in `prisma/schema.prisma`; public reads and dashboard CRUD remain future stages.
 
-The current Prisma datasource is SQLite and the schema contains no application models. PostgreSQL migration is a future operational option, not a Version 1 feature.
+The current Prisma datasource is SQLite and the initial bilingual content migration is applied for local development. PostgreSQL migration is a future operational option, not a Version 1 feature.
 
-Version 1 supports English and Arabic and includes Instagram integration. Online payment remains excluded. The current localization layer is static and typed; future database-managed translations remain a planned extension.
+Version 1 supports English and Arabic and includes Instagram integration. Online payment remains excluded. The current public localization layer remains static and typed, while the database now has locale-keyed translation records ready for a later repository migration.
 
 Principles:
 
@@ -955,15 +955,16 @@ Keep migration practical by:
 
 SQLite remains suitable for the planned foundation and a small MVP deployment only if the chosen production environment supports durable storage, backups, and the expected write concurrency. Hosting constraints must be confirmed before deployment. PostgreSQL should be selected before launch if the platform uses ephemeral storage, multiple application instances, or higher concurrent writes.
 
-## 11. Future Localization
+## 11. Localization Foundation
 
 Version 1 stores English (`en`) only. To avoid rebuilding:
 
 - Keep `locale` on singleton/page content where appropriate.
 - Keep UI labels in a central application message layer rather than scattering literals.
-- When multilingual scope is approved, introduce translation tables such as `TourTranslation`, `FaqTranslation`, and `SiteSettingTranslation` keyed by entity and locale. `HomepageContent` and `PageContent` already have a locale boundary.
-- Do not add empty translation tables in Version 1.
-- Slug localization and locale-prefixed routes require a separate approved URL strategy.
+- English and Arabic use one shared business entity plus related translation records keyed by the `Locale` enum.
+- Composite uniqueness on `(entityId, locale)` prevents duplicate translations while IDs, slugs, prices, ordering, statuses, media paths, and itinerary day numbers remain language-independent.
+- Tour, pricing, itinerary, FAQ, page-section, Gallery, Instagram, contact-option, setting, and SEO translations follow the same relationship pattern.
+- Tour slugs remain stable and untranslated across locale-prefixed routes.
 
 ## 12. Client Change Management
 
@@ -1000,6 +1001,17 @@ Normal business content changes should require dashboard updates only.
 - Legal privacy and terms versions
 # Future Localization Mapping
 
-The current bilingual static adapter keeps stable entity IDs, slugs, prices, ordering, publication state, and image paths outside translated presentation content. A later Prisma design should preserve one business entity and add locale-keyed translation records for content-rich models (for example `TourTranslation`, `FaqItemTranslation`, and page-section translations) with a composite unique constraint on entity ID plus locale. Small structured settings may use explicitly typed localized fields where justified. Do not duplicate tours, bookings, prices, or itinerary order per language, and do not store the whole website in one untyped JSON blob.
+The current bilingual static adapter keeps stable entity IDs, slugs, prices, ordering, publication state, and image paths outside translated presentation content. The implemented Prisma foundation mirrors that boundary with one business entity and locale-keyed translation records. Scoped JSON is limited to typed FAQ answer blocks and ordered editorial paragraphs; the complete website is not stored in one untyped blob.
 
-Supported locale validation remains an application-level allowlist (`en`, `ar`) until a database localization design is approved. No Prisma model or migration is part of the current bilingual frontend implementation.
+Supported locale validation remains an application-level allowlist (`en`, `ar`) and is mirrored by the Prisma `Locale` enum. Migration `bilingual_content_foundation` creates the local schema, and `prisma/seed.ts` deterministically imports the current verified static content. Public components still use the static adapters until a later repository migration.
+
+## 14. Implemented Database Foundation
+
+- Provider: SQLite through Prisma 7 and `@prisma/adapter-better-sqlite3`.
+- Content ownership: owning content entities cascade to their translations and ordered child records; category relations use restrictive deletion where shared reassignment is safer.
+- Customer data safety: Tour deletion is restricted when booking requests reference it; contact enquiry-type deletion sets the optional relation to null while preserving the submitted stable value.
+- Money: current whole-dollar USD values are stored as integers, never floating point.
+- Requests: `BookingRequest` matches the current booking form and `ContactRequest` matches the current general-enquiry form. Neither is connected to public forms or seeded.
+- Settings: typed, public-safe site settings and social links are separated from environment variables and secrets.
+- Seed: `npm`/Prisma executes `tsx prisma/seed.ts`; stable IDs and upserts make reruns deterministic.
+- Compatibility boundary: generated Prisma code and `src/lib/prisma.ts` are server-only infrastructure. Pages, components, forms, and client bundles do not import Prisma.

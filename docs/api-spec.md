@@ -1042,3 +1042,9 @@ Use current supported Next.js cache APIs after reviewing the installed documenta
 # Locale Contract
 
 Public read operations should accept a validated `Locale` (`en` or `ar`) when returning user-facing content. Stable inputs and outputs such as tour slugs, booking option values, prices, statuses, and IDs remain language-independent. Validation rules are shared; localized error messages are selected at the presentation or server-operation boundary. Future repository responses should combine one business entity with its requested translation. No localized API routes or database queries are implemented yet.
+
+## 20. Database Foundation Status
+
+The Prisma database foundation and deterministic bilingual seed are implemented, but this API specification remains prospective: no route handlers, Server Actions, public database reads, or request writes were added. Future implementations must reuse the existing Zod rules on the server, map stable submitted values rather than translated labels, select exactly one requested locale translation, return domain DTOs instead of Prisma records, and keep notification/email delivery separate from persistence.
+
+`BookingRequest` and `ContactRequest` tables exist only as storage foundations. Current browser submission behavior is unchanged until an explicitly approved server operation adds validation, spam protection, rate limiting, persistence, safe errors, and notification handoff.

@@ -10,10 +10,15 @@
     "typecheck": "tsc --noEmit",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
+    "db:seed": "prisma db seed",
+    "db:validate": "prisma validate",
+    "db:format": "prisma format",
     "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@prisma/adapter-better-sqlite3": "7.9.0",
     "@prisma/client": "^7.9.0",
+    "better-sqlite3": "^13.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.26.0",
@@ -32,6 +37,7 @@
     "eslint-config-next": "16.2.11",
     "prisma": "^7.9.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.4",
     "typescript": "^5"
   }
 }

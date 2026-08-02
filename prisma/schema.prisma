@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -10,4 +5,553 @@ generator client {
 
 datasource db {
   provider = "sqlite"
+}
+
+enum Locale {
+  en
+  ar
+}
+
+enum PublicationStatus {
+  draft
+  published
+  archived
+}
+
+enum TourPackageType {
+  group
+  camping
+  comfy
+}
+
+enum TourListItemType {
+  included
+  excluded
+  requiredExtra
+}
+
+enum GalleryMediaType {
+  image
+  video
+  carousel
+}
+
+enum ContactMethodType {
+  email
+  phone
+  whatsapp
+  location
+  social
+}
+
+enum ContactRequestStatus {
+  new
+  inProgress
+  resolved
+  archived
+}
+
+enum BookingRequestStatus {
+  new
+  reviewing
+  contacted
+  confirmed
+  declined
+  archived
+}
+
+enum SettingValueType {
+  string
+  boolean
+  integer
+  url
+}
+
+model Tour {
+  id                      String             @id
+  slug                    String             @unique
+  packageType             TourPackageType
+  durationDays            Int?
+  heroImagePath           String
+  cardImagePath           String?
+  featured                Boolean            @default(false)
+  status                  PublicationStatus  @default(draft)
+  displayOrder            Int                @default(0)
+  needsClientConfirmation Boolean            @default(false)
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
+  translations            TourTranslation[]
+  pricingTiers            TourPricingTier[]
+  listItems               TourListItem[]
+  itineraryDays           TourItineraryDay[]
+  images                  TourImage[]
+  bookingRequests         BookingRequest[]
+
+  @@index([status, displayOrder])
+}
+
+model TourTranslation {
+  id                       String  @id
+  tourId                   String
+  locale                   Locale
+  packageLabel             String
+  title                    String
+  tourType                 String
+  shortDescription         String
+  fullDescription          String
+  durationLabel            String?
+  pricingAvailabilityLabel String?
+  accommodationNote        String?
+  practicalNote            String?
+  heroImageAlt             String
+  seoTitle                 String?
+  seoDescription           String?
+  tour                     Tour    @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  @@unique([tourId, locale])
+}
+
+model TourPricingTier {
+  id             String                   @id
+  tourId         String
+  minGuests      Int?
+  maxGuests      Int?
+  pricePerPerson Int
+  currency       String
+  displayOrder   Int                      @default(0)
+  status         PublicationStatus        @default(published)
+  tour           Tour                     @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  translations   TourPricingTranslation[]
+
+  @@unique([tourId, displayOrder])
+}
+
+model TourPricingTranslation {
+  id            String          @id
+  pricingTierId String
+  locale        Locale
+  label         String
+  note          String?
+  pricingTier   TourPricingTier @relation(fields: [pricingTierId], references: [id], onDelete: Cascade)
+
+  @@unique([pricingTierId, locale])
+}
+
+model TourListItem {
+  id             String                    @id
+  tourId         String
+  type           TourListItemType
+  referencePrice Int?
+  currency       String?
+  displayOrder   Int                       @default(0)
+  status         PublicationStatus         @default(published)
+  tour           Tour                      @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  translations   TourListItemTranslation[]
+
+  @@unique([tourId, type, displayOrder])
+  @@index([tourId, type, status])
+}
+
+model TourListItemTranslation {
+  id          String       @id
+  listItemId  String
+  locale      Locale
+  label       String
+  description String?
+  listItem    TourListItem @relation(fields: [listItemId], references: [id], onDelete: Cascade)
+
+  @@unique([listItemId, locale])
+}
+
+model TourItineraryDay {
+  id                      String                        @id
+  tourId                  String
+  dayNumber               Int
+  displayOrder            Int
+  imagePath               String?
+  status                  PublicationStatus             @default(published)
+  needsClientConfirmation Boolean                       @default(false)
+  tour                    Tour                          @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  translations            TourItineraryDayTranslation[]
+
+  @@unique([tourId, dayNumber])
+}
+
+model TourItineraryDayTranslation {
+  id             String           @id
+  itineraryDayId String
+  locale         Locale
+  title          String
+  description    String
+  overnight      String?
+  location       String?
+  imageAlt       String?
+  itineraryDay   TourItineraryDay @relation(fields: [itineraryDayId], references: [id], onDelete: Cascade)
+
+  @@unique([itineraryDayId, locale])
+}
+
+model TourImage {
+  id           String                 @id
+  tourId       String
+  imagePath    String
+  displayOrder Int                    @default(0)
+  status       PublicationStatus      @default(published)
+  tour         Tour                   @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  translations TourImageTranslation[]
+
+  @@unique([tourId, displayOrder])
+}
+
+model TourImageTranslation {
+  id          String    @id
+  tourImageId String
+  locale      Locale
+  altText     String
+  title       String?
+  tourImage   TourImage @relation(fields: [tourImageId], references: [id], onDelete: Cascade)
+
+  @@unique([tourImageId, locale])
+}
+
+model FaqCategory {
+  id           String                   @id
+  key          String                   @unique
+  displayOrder Int
+  status       PublicationStatus        @default(published)
+  translations FaqCategoryTranslation[]
+  items        FaqItem[]
+
+  @@index([status, displayOrder])
+}
+
+model FaqCategoryTranslation {
+  id         String      @id
+  categoryId String
+  locale     Locale
+  label      String
+  category   FaqCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, locale])
+}
+
+model FaqItem {
+  id           String               @id
+  categoryId   String
+  displayOrder Int
+  status       PublicationStatus    @default(published)
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  category     FaqCategory          @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  translations FaqItemTranslation[]
+
+  @@index([categoryId, status, displayOrder])
+}
+
+model FaqItemTranslation {
+  id        String  @id
+  faqItemId String
+  locale    Locale
+  question  String
+  answer    Json
+  faqItem   FaqItem @relation(fields: [faqItemId], references: [id], onDelete: Cascade)
+
+  @@unique([faqItemId, locale])
+}
+
+model ContentPage {
+  id           String                   @id
+  key          String                   @unique
+  status       PublicationStatus        @default(published)
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+  translations ContentPageTranslation[]
+  sections     ContentSection[]
+}
+
+model ContentPageTranslation {
+  id          String      @id
+  pageId      String
+  locale      Locale
+  eyebrow     String?
+  title       String
+  description String?
+  page        ContentPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@unique([pageId, locale])
+}
+
+model ContentSection {
+  id           String                      @id
+  pageId       String
+  key          String
+  sectionType  String
+  imagePath    String?
+  displayOrder Int
+  status       PublicationStatus           @default(published)
+  page         ContentPage                 @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  translations ContentSectionTranslation[]
+  items        ContentItem[]
+
+  @@unique([pageId, key])
+  @@index([pageId, status, displayOrder])
+}
+
+model ContentSectionTranslation {
+  id          String         @id
+  sectionId   String
+  locale      Locale
+  eyebrow     String?
+  title       String
+  description String?
+  paragraphs  Json?
+  imageAlt    String?
+  section     ContentSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@unique([sectionId, locale])
+}
+
+model ContentItem {
+  id           String                   @id
+  sectionId    String
+  key          String
+  imagePath    String?
+  href         String?
+  displayOrder Int
+  status       PublicationStatus        @default(published)
+  section      ContentSection           @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  translations ContentItemTranslation[]
+
+  @@unique([sectionId, key])
+}
+
+model ContentItemTranslation {
+  id            String      @id
+  contentItemId String
+  locale        Locale
+  label         String?
+  title         String
+  description   String?
+  imageAlt      String?
+  contentItem   ContentItem @relation(fields: [contentItemId], references: [id], onDelete: Cascade)
+
+  @@unique([contentItemId, locale])
+}
+
+model GalleryCategory {
+  id           String                       @id
+  key          String                       @unique
+  displayOrder Int
+  status       PublicationStatus            @default(published)
+  translations GalleryCategoryTranslation[]
+  items        GalleryItem[]
+
+  @@index([status, displayOrder])
+}
+
+model GalleryCategoryTranslation {
+  id         String          @id
+  categoryId String
+  locale     Locale
+  label      String
+  category   GalleryCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, locale])
+}
+
+model GalleryItem {
+  id           String                   @id
+  categoryId   String
+  mediaType    GalleryMediaType         @default(image)
+  mediaPath    String
+  postUrl      String?
+  featured     Boolean                  @default(false)
+  displayOrder Int
+  status       PublicationStatus        @default(published)
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+  category     GalleryCategory          @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  translations GalleryItemTranslation[]
+
+  @@index([status, displayOrder])
+}
+
+model GalleryItemTranslation {
+  id            String      @id
+  galleryItemId String
+  locale        Locale
+  title         String
+  description   String?
+  altText       String
+  location      String?
+  galleryItem   GalleryItem @relation(fields: [galleryItemId], references: [id], onDelete: Cascade)
+
+  @@unique([galleryItemId, locale])
+}
+
+model InstagramPost {
+  id           String                     @id
+  mediaType    GalleryMediaType
+  mediaPath    String
+  postUrl      String?
+  placeholder  Boolean                    @default(false)
+  displayOrder Int
+  status       PublicationStatus          @default(published)
+  createdAt    DateTime                   @default(now())
+  updatedAt    DateTime                   @updatedAt
+  translations InstagramPostTranslation[]
+
+  @@index([status, displayOrder])
+}
+
+model InstagramPostTranslation {
+  id              String        @id
+  instagramPostId String
+  locale          Locale
+  altText         String
+  caption         String?
+  instagramPost   InstagramPost @relation(fields: [instagramPostId], references: [id], onDelete: Cascade)
+
+  @@unique([instagramPostId, locale])
+}
+
+model ContactMethod {
+  id           String                     @id
+  key          String                     @unique
+  type         ContactMethodType
+  value        String
+  href         String?
+  external     Boolean                    @default(false)
+  displayOrder Int
+  status       PublicationStatus          @default(draft)
+  translations ContactMethodTranslation[]
+
+  @@index([status, displayOrder])
+}
+
+model ContactMethodTranslation {
+  id              String        @id
+  contactMethodId String
+  locale          Locale
+  label           String
+  description     String?
+  contactMethod   ContactMethod @relation(fields: [contactMethodId], references: [id], onDelete: Cascade)
+
+  @@unique([contactMethodId, locale])
+}
+
+model ContactEnquiryType {
+  id              String                          @id
+  value           String                          @unique
+  displayOrder    Int
+  status          PublicationStatus               @default(published)
+  translations    ContactEnquiryTypeTranslation[]
+  contactRequests ContactRequest[]
+
+  @@index([status, displayOrder])
+}
+
+model ContactEnquiryTypeTranslation {
+  id            String             @id
+  enquiryTypeId String
+  locale        Locale
+  label         String
+  enquiryType   ContactEnquiryType @relation(fields: [enquiryTypeId], references: [id], onDelete: Cascade)
+
+  @@unique([enquiryTypeId, locale])
+}
+
+model ContactRequest {
+  id            String               @id @default(cuid())
+  name          String
+  email         String
+  enquiryTypeId String?
+  enquiryValue  String
+  subject       String?
+  message       String
+  locale        Locale
+  status        ContactRequestStatus @default(new)
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  enquiryType   ContactEnquiryType?  @relation(fields: [enquiryTypeId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+}
+
+model BookingRequest {
+  id                   String               @id @default(cuid())
+  tourId               String
+  selectedPackageTitle String
+  fullName             String
+  email                String
+  whatsappNumber       String
+  country              String
+  preferredArrivalDate DateTime
+  adults               Int
+  children             Int                  @default(0)
+  specialRequirements  String?
+  locale               Locale
+  status               BookingRequestStatus @default(new)
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  tour                 Tour                 @relation(fields: [tourId], references: [id], onDelete: Restrict)
+
+  @@index([status, createdAt])
+  @@index([tourId, createdAt])
+}
+
+model SiteSetting {
+  id           String                   @id
+  key          String                   @unique
+  value        String?
+  valueType    SettingValueType         @default(string)
+  isPublic     Boolean                  @default(true)
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+  translations SiteSettingTranslation[]
+}
+
+model SiteSettingTranslation {
+  id            String      @id
+  siteSettingId String
+  locale        Locale
+  value         String
+  siteSetting   SiteSetting @relation(fields: [siteSettingId], references: [id], onDelete: Cascade)
+
+  @@unique([siteSettingId, locale])
+}
+
+model SocialLink {
+  id           String                  @id
+  platformKey  String                  @unique
+  url          String
+  displayOrder Int
+  status       PublicationStatus       @default(draft)
+  translations SocialLinkTranslation[]
+
+  @@index([status, displayOrder])
+}
+
+model SocialLinkTranslation {
+  id           String     @id
+  socialLinkId String
+  locale       Locale
+  label        String
+  socialLink   SocialLink @relation(fields: [socialLinkId], references: [id], onDelete: Cascade)
+
+  @@unique([socialLinkId, locale])
+}
+
+model SeoMetadata {
+  id          String   @id
+  pageKey     String
+  locale      Locale
+  title       String
+  description String
+  imagePath   String?
+  noIndex     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([pageKey, locale])
 }

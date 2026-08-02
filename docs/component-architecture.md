@@ -419,6 +419,8 @@ Never generate fabricated ratings, availability, prices, organization data, or t
 
 Server-only Prisma client lifecycle and database utilities. This is the only low-level database foundation imported by Prisma repository implementations.
 
+The implemented equivalent is `src/lib/prisma.ts`. It creates one Prisma 7 client through the SQLite driver adapter, caches the development instance, requires `DATABASE_URL`, and must never be imported by Client Components. Generated client code lives under `src/generated/prisma` and is not a presentation-layer dependency.
+
 ### `src/lib/utils`
 
 Pure, provider-independent helpers:
@@ -967,3 +969,7 @@ src/proxy.ts                  # Deterministic default-English redirect
 ```
 
 Shared components are not duplicated by language. Server routes select localized content and pass only required strings to interactive components. The language switcher is the sole client route-replacement boundary and preserves the current path, query string, and hash. Form components receive locale-specific copy and create validation schemas from shared rule factories.
+
+## 21. Database Foundation Boundary
+
+The Prisma schema, migration, generated client, and deterministic seed now exist, but the public frontend intentionally remains on the existing typed static adapters. A later task may introduce domain repositories that map Prisma entities plus one requested translation into the current component DTOs. No page, Server Component, form service, or Client Component should query Prisma directly, and no mixed static/database fallback should be introduced during that migration.

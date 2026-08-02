@@ -52,6 +52,7 @@ Version 1 supports English and Arabic and does not include online payment. Engli
 - Domain content remains separated under `src/i18n/content`, using one locale-selected object per domain rather than duplicated React pages.
 - English renders with `lang="en"` and `dir="ltr"`; Arabic renders with `lang="ar"` and `dir="rtl"` from the server.
 - No browser-language detection, local-storage locale source, database integration, or dashboard localization UI is included yet.
+- The Prisma bilingual database foundation is now present, but public pages still use the typed static content adapters; no public database reads or dashboard localization UI are included yet.
 
 ## 3. Product Vision
 
