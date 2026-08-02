@@ -973,3 +973,12 @@ Shared components are not duplicated by language. Server routes select localized
 ## 21. Database Foundation Boundary
 
 The Prisma schema, migration, generated client, and deterministic seed now exist, but the public frontend intentionally remains on the existing typed static adapters. A later task may introduce domain repositories that map Prisma entities plus one requested translation into the current component DTOs. No page, Server Component, form service, or Client Component should query Prisma directly, and no mixed static/database fallback should be introduced during that migration.
+## Admin authentication boundary
+
+- `src/auth.ts` configures the credentials provider and minimal JWT session claims.
+- `src/lib/auth/admin.ts` is the server-only database-backed authorization boundary.
+- `src/lib/actions/admin-auth.ts` owns login, password-change, and logout actions.
+- `src/app/admin/(protected)/layout.tsx` enforces authorization before rendering the compact admin shell.
+- `/admin/dashboard` is read-only and reports real database counts; no management links or CRUD components exist yet.
+
+Future admin Server Actions and Route Handlers must call the same authorization boundary before sensitive reads or mutations.

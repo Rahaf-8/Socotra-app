@@ -1015,3 +1015,10 @@ Supported locale validation remains an application-level allowlist (`en`, `ar`) 
 - Settings: typed, public-safe site settings and social links are separated from environment variables and secrets.
 - Seed: `npm`/Prisma executes `tsx prisma/seed.ts`; stable IDs and upserts make reruns deterministic.
 - Compatibility boundary: generated Prisma code and `src/lib/prisma.ts` are server-only infrastructure. Pages, components, forms, and client bundles do not import Prisma.
+## Administrator accounts
+
+`AdminUser` stores a unique normalized email, bcrypt password hash, active state, mandatory-first-login flag, failed-login state, and `sessionVersion`. Password changes and explicit CLI resets increment `sessionVersion`, invalidating existing JWT sessions when the server-side authorization boundary next checks the database. Five failed checks temporarily lock a known account for 15 minutes; production also requires shared endpoint/IP-aware throttling.
+
+Administrator records are never part of the content seed. `ADMIN_NAME`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` are temporary bootstrap inputs only and must be removed after running `npm run admin:create`. The SQLite database remains local development infrastructure. Production requires a persistent database migration, a fresh production client account, authentication revalidation, secure secrets, logging/monitoring, and optional MFA planning.
+
+`AUTH_SECRET` is a runtime secret and must differ by environment. `AUTH_TRUST_HOST=true` is used only where the deployment platform/proxy provides a trusted `Host` header; it must be reviewed with the final hosting configuration.

@@ -1048,3 +1048,8 @@ Public read operations should accept a validated `Locale` (`en` or `ar`) when re
 The Prisma database foundation and deterministic bilingual seed are implemented, but this API specification remains prospective: no route handlers, Server Actions, public database reads, or request writes were added. Future implementations must reuse the existing Zod rules on the server, map stable submitted values rather than translated labels, select exactly one requested locale translation, return domain DTOs instead of Prisma records, and keep notification/email delivery separate from persistence.
 
 `BookingRequest` and `ContactRequest` tables exist only as storage foundations. Current browser submission behavior is unchanged until an explicitly approved server operation adds validation, spam protection, rate limiting, persistence, safe errors, and notification handoff.
+## Authentication routes
+
+`/api/auth/[...nextauth]` is the only authentication route handler and is owned by Auth.js. Administrator login uses credentials only; there is no sign-up, social OAuth, magic link, or public password-reset endpoint. `/admin/change-password` verifies and updates credentials through a server action, then revokes sessions and signs the administrator out.
+
+No content, Contact, Booking, upload, email, or payment API is introduced by the authentication foundation. Future admin APIs must enforce the server-only database-backed administrator authorization boundary. Production hardening still includes shared rate limiting, security monitoring, a reviewed CSP strategy, and optional MFA.

@@ -818,3 +818,11 @@ English and Arabic public pages use locale-prefixed URLs. English is the determi
 | `/en/booking` | `/ar/booking` | Booking request; query-string tour context is preserved |
 
 The language switcher replaces only the first locale segment and preserves the remaining path, query parameters, and hash. Unsupported first segments are treated as unprefixed legacy paths and redirected under `/en`, where normal not-found behavior applies. Static assets, Next.js internals, API routes, and future `/admin` routes are excluded from locale redirection.
+## Private administrator routes
+
+- `/admin/login` — credentials login
+- `/admin/change-password` — mandatory first-login password change
+- `/admin` — protected redirect to the dashboard
+- `/admin/dashboard` — protected read-only database overview
+
+Admin routes are outside locale routing, use no public Navbar/Footer, are marked `noindex, nofollow`, and are excluded from the public sitemap and navigation.

@@ -555,3 +555,21 @@ model SeoMetadata {
 
   @@unique([pageKey, locale])
 }
+
+model AdminUser {
+  id                  String    @id @default(cuid())
+  name                String
+  email               String    @unique
+  passwordHash        String
+  isActive            Boolean   @default(true)
+  mustChangePassword  Boolean   @default(true)
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+  sessionVersion      Int       @default(0)
+  passwordChangedAt   DateTime?
+  lastLoginAt         DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([isActive])
+}

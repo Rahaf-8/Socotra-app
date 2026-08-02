@@ -1087,3 +1087,8 @@ Unconfirmed ideas remain out of scope until formally approved.
 | Visual reference | `docs/design-brief.md` |
 | Missing information | Must be labeled “Client Information Required” |
 | Framework guidance | Review installed Next.js documentation before implementation |
+## Administrator authentication foundation
+
+The private, English-only administrator area lives at `/admin`, outside the public `/en` and `/ar` route trees. Auth.js `5.0.0-beta.32` provides credentials authentication and JWT sessions; every protected server layout/action revalidates the administrator against Prisma. There is no public registration, content CRUD, Contact/Booking connection, or payment functionality.
+
+Administrators are created explicitly with `npm run admin:create` and reset with `npm run admin:reset-password`. Client and developer access must use separate accounts. Local SQLite accounts are development-only; the final client account must be created separately against the future persistent production database and handed over through a secure channel.
