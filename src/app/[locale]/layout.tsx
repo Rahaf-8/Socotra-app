@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Cormorant_Garamond, Manrope, Noto_Sans_Arabic } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import { Suspense } from "react";
 
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { getNavigation } from "@/config/navigation";
 import { siteSettingsPlaceholder } from "@/config/site-settings";
+import { almarai } from "@/fonts/almarai";
 import { isLocale, localeDetails, locales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 
@@ -14,7 +15,6 @@ import "../globals.css";
 
 const manrope = Manrope({ variable: "--font-manrope", subsets: ["latin"], display: "swap" });
 const cormorant = Cormorant_Garamond({ variable: "--font-cormorant", subsets: ["latin"], weight: ["500", "600"], display: "swap" });
-const notoArabic = Noto_Sans_Arabic({ variable: "--font-arabic", subsets: ["arabic"], weight: ["400", "500", "600", "700"], display: "swap" });
 
 export const metadata: Metadata = {
   title: { default: "Socotra Island Tourism", template: "%s | Socotra Island Tourism" },
@@ -34,7 +34,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   const isArabic = value === "ar";
 
   return (
-    <html lang={value} dir={localeDetails[value].dir} className={`${manrope.variable} ${cormorant.variable} ${notoArabic.variable} h-full antialiased`}>
+    <html lang={value} dir={localeDetails[value].dir} className={`${manrope.variable} ${cormorant.variable} ${isArabic ? almarai.variable : ""} h-full antialiased`}>
       <body className={`flex min-h-full flex-col ${isArabic ? "font-arabic" : ""}`}>
         <Suspense fallback={null}>
           <Navbar

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import type { Locale } from "@/i18n/config";
-import { submitReview } from "@/lib/services/review";
+import { submitReview, submitReviewForm } from "@/lib/services/review";
 import { createReviewSchema, type ReviewInput } from "@/lib/validation/review";
 
 export type ReviewFormContent = {
@@ -26,6 +26,7 @@ const fieldClass = "mt-2 min-h-12 w-full rounded-xl border border-warm-line bg-w
 
 export function ReviewForm({ locale, content }: { locale: Locale; content: ReviewFormContent }) {
   const [submitted, setSubmitted] = useState(false);
+  const progressiveSubmit = submitReviewForm.bind(null, locale);
   const { register, handleSubmit, setError, setFocus, clearErrors, reset, control, formState: { errors, isSubmitting } } = useForm<ReviewInput>({
     defaultValues: { name: "", email: "", rating: 0, message: "", website: "" },
   });
@@ -69,7 +70,7 @@ export function ReviewForm({ locale, content }: { locale: Locale; content: Revie
 
   if (submitted) return <div role="status" aria-live="polite" className="rounded-2xl border border-palm/20 bg-white p-6 shadow-soft sm:p-8"><h3 className="font-display text-3xl font-semibold">{content.successTitle}</h3><p className="mt-3 leading-7 text-charcoal/70">{content.successMessage}</p></div>;
 
-  return <form id="write-review" onSubmit={handleSubmit(onSubmit)} noValidate aria-busy={isSubmitting} className="rounded-2xl border bg-white p-5 shadow-soft sm:p-8">
+  return <form id="write-review" action={progressiveSubmit} onSubmit={handleSubmit(onSubmit)} noValidate aria-busy={isSubmitting} className="rounded-2xl border bg-white p-5 shadow-soft sm:p-8">
     <div className="sr-only" aria-hidden="true"><label>Website<input {...register("website")} tabIndex={-1} autoComplete="off" /></label></div>
     <h3 className="font-display text-3xl font-semibold sm:text-4xl">{content.title}</h3>
     <p className="mt-3 max-w-2xl text-sm leading-7 text-charcoal/65">{content.description}</p>

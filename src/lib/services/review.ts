@@ -8,6 +8,16 @@ import { createReviewSchema } from "@/lib/validation/review";
 
 export type ReviewSubmissionResult = { success: boolean; message?: string };
 
+export async function submitReviewForm(locale: Locale, formData: FormData): Promise<void> {
+  await submitReview({
+    name: formData.get("name"),
+    email: formData.get("email"),
+    rating: Number(formData.get("rating")),
+    message: formData.get("message"),
+    website: formData.get("website") ?? "",
+  }, locale);
+}
+
 export async function submitReview(input: unknown, locale: Locale): Promise<ReviewSubmissionResult> {
   const safeError = locale === "ar" ? "تعذر إرسال المراجعة. راجع البيانات وحاول مرة أخرى." : "We could not submit your review. Check the details and try again.";
   if (!isLocale(locale)) return { success: false, message: safeError };

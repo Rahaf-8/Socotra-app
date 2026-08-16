@@ -42,6 +42,10 @@ body {
   line-height: 1.7;
 }
 
+[dir="rtl"] {
+  font-family: var(--font-arabic), sans-serif;
+}
+
 [dir="rtl"] .font-display {
   font-family: var(--font-arabic), sans-serif;
   letter-spacing: 0;

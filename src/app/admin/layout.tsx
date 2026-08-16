@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 
+import { almarai } from "@/fonts/almarai";
+
 import "../globals.css";
 
 const manrope = Manrope({ variable: "--font-manrope", subsets: ["latin"], display: "swap" });
@@ -12,5 +14,5 @@ export const metadata: Metadata = {
 };
 
 export default function AdminRootLayout({ children }: { children: React.ReactNode }) {
-  return <html lang="en" dir="ltr" className={`${manrope.variable} ${cormorant.variable} h-full antialiased`}><body className="min-h-full bg-soft-sand">{children}</body></html>;
+  return <html lang="en" dir="ltr" className={`${manrope.variable} ${cormorant.variable} ${almarai.variable} h-full antialiased`}><body className="min-h-full bg-soft-sand">{children}</body></html>;
 }
