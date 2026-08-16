@@ -60,6 +60,13 @@ enum BookingRequestStatus {
   archived
 }
 
+enum ReviewStatus {
+  pending
+  approved
+  rejected
+  archived
+}
+
 enum SettingValueType {
   string
   boolean
@@ -73,7 +80,9 @@ model Tour {
   packageType             TourPackageType
   durationDays            Int?
   heroImagePath           String
+  heroImagePublicId       String?
   cardImagePath           String?
+  cardImagePublicId       String?
   featured                Boolean            @default(false)
   status                  PublicationStatus  @default(draft)
   displayOrder            Int                @default(0)
@@ -169,6 +178,7 @@ model TourItineraryDay {
   dayNumber               Int
   displayOrder            Int
   imagePath               String?
+  imagePublicId           String?
   status                  PublicationStatus             @default(published)
   needsClientConfirmation Boolean                       @default(false)
   tour                    Tour                          @relation(fields: [tourId], references: [id], onDelete: Cascade)
@@ -192,13 +202,14 @@ model TourItineraryDayTranslation {
 }
 
 model TourImage {
-  id           String                 @id
-  tourId       String
-  imagePath    String
-  displayOrder Int                    @default(0)
-  status       PublicationStatus      @default(published)
-  tour         Tour                   @relation(fields: [tourId], references: [id], onDelete: Cascade)
-  translations TourImageTranslation[]
+  id                 String                 @id
+  tourId             String
+  imagePath          String
+  cloudinaryPublicId String?
+  displayOrder       Int                    @default(0)
+  status             PublicationStatus      @default(published)
+  tour               Tour                   @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  translations       TourImageTranslation[]
 
   @@unique([tourId, displayOrder])
 }
@@ -360,18 +371,19 @@ model GalleryCategoryTranslation {
 }
 
 model GalleryItem {
-  id           String                   @id
-  categoryId   String
-  mediaType    GalleryMediaType         @default(image)
-  mediaPath    String
-  postUrl      String?
-  featured     Boolean                  @default(false)
-  displayOrder Int
-  status       PublicationStatus        @default(published)
-  createdAt    DateTime                 @default(now())
-  updatedAt    DateTime                 @updatedAt
-  category     GalleryCategory          @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  translations GalleryItemTranslation[]
+  id                 String                   @id
+  categoryId         String
+  mediaType          GalleryMediaType         @default(image)
+  mediaPath          String
+  cloudinaryPublicId String?
+  postUrl            String?
+  featured           Boolean                  @default(false)
+  displayOrder       Int
+  status             PublicationStatus        @default(published)
+  createdAt          DateTime                 @default(now())
+  updatedAt          DateTime                 @updatedAt
+  category           GalleryCategory          @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  translations       GalleryItemTranslation[]
 
   @@index([status, displayOrder])
 }
@@ -469,6 +481,7 @@ model ContactRequest {
   enquiryValue  String
   subject       String?
   message       String
+  internalNotes String?
   locale        Locale
   status        ContactRequestStatus @default(new)
   createdAt     DateTime             @default(now())
@@ -490,6 +503,7 @@ model BookingRequest {
   adults               Int
   children             Int                  @default(0)
   specialRequirements  String?
+  internalNotes        String?
   locale               Locale
   status               BookingRequestStatus @default(new)
   createdAt            DateTime             @default(now())
@@ -498,6 +512,20 @@ model BookingRequest {
 
   @@index([status, createdAt])
   @@index([tourId, createdAt])
+}
+
+model Review {
+  id        String       @id
+  name      String
+  email     String
+  rating    Int
+  message   String
+  locale    Locale
+  status    ReviewStatus @default(pending)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@index([status, createdAt])
 }
 
 model SiteSetting {
@@ -572,4 +600,14 @@ model AdminUser {
   updatedAt           DateTime  @updatedAt
 
   @@index([isActive])
+}
+
+model CloudinaryAsset {
+  publicId  String    @id
+  secureUrl String
+  context   String
+  createdAt DateTime  @default(now())
+  claimedAt DateTime?
+
+  @@index([claimedAt, createdAt])
 }

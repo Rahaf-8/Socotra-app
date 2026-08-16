@@ -1,17 +1,17 @@
-import type { ContactRequestInput } from "@/lib/validation/contact-request";
+"use server";
 
-export type ContactRequestResult =
-  | { success: true }
-  | { success: false; code: "NOT_CONFIGURED" | "FAILED" };
+import { revalidatePath } from "next/cache";
 
-/**
- * Temporary in-browser boundary. It deliberately does not persist, transmit,
- * log, or otherwise retain personal data. Replace this implementation with the
- * approved server operation when contact-request storage and delivery exist.
- */
-export async function submitContactRequest(
-  request: ContactRequestInput,
-): Promise<ContactRequestResult> {
-  void request;
-  return { success: false, code: "NOT_CONFIGURED" };
+import type { Locale } from "@/i18n/config";
+import { persistContactRequest, type ContactSubmissionResult } from "@/lib/requests/request-submission";
+
+export type ContactRequestResult = ContactSubmissionResult;
+
+export async function submitContactRequest(input: unknown, locale: Locale): Promise<ContactRequestResult> {
+  const result = await persistContactRequest(input, locale);
+  if (result.success) {
+    revalidatePath("/admin/contact-requests");
+    revalidatePath("/admin/dashboard");
+  }
+  return result;
 }

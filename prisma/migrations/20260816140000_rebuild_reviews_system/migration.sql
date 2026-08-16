@@ -1,0 +1,3 @@
+-- SQLite stores Prisma enum values as TEXT. This migration records the
+-- application-level ReviewStatus expansion to include the archival workflow;
+-- no table rewrite is required and existing Review rows remain unchanged.

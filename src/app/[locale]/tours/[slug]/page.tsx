@@ -10,6 +10,7 @@ import { TourExtras } from "@/components/tours/tour-extras";
 import { TourExcluded } from "@/components/tours/tour-excluded";
 import { TourIncluded } from "@/components/tours/tour-included";
 import { TourInformation } from "@/components/tours/tour-information";
+import { TourGallery } from "@/components/tours/tour-gallery";
 import { TourItineraryAccordion } from "@/components/tours/tour-itinerary-accordion";
 import { TourPricing } from "@/components/tours/tour-pricing";
 import { siteSettingsPlaceholder } from "@/config/site-settings";
@@ -56,6 +57,7 @@ export default async function TourPage({ params }: Props) {
                 <TourExcluded items={tour.excluded} heading={locale === "ar" ? "غير مشمول" : "Not Included"} />
                 <TourExtras extras={tour.requiredExtras} locale={locale} heading={labels.extras} note={labels.extrasNote} />
                 <TourItineraryAccordion days={tour.itinerary} labels={{ heading: labels.itinerary, day: labels.day, overnight: labels.overnight, location: labels.location }} />
+                <TourGallery images={tour.galleryImages} heading={locale === "ar" ? "معرض الرحلة" : "Tour Gallery"} />
               </div>
               <Link href={localizedHref(locale, "/tours")} className="mt-10 inline-flex min-h-11 items-center gap-2 rounded-full text-sm font-bold text-deep-ocean outline-none hover:text-ocean focus-visible:ring-2 focus-visible:ring-ocean"><ArrowLeft aria-hidden="true" className="size-4 rtl:rotate-180" />{labels.back}</Link>
             </div>

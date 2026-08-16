@@ -90,11 +90,11 @@ Introduce Socotra and the company, establish trust, surface current tours and fl
 7. Gallery preview
 8. Instagram feed
 9. FAQ preview
-10. Testimonials only if authentic content is later confirmed
+10. Approved customer Reviews with moderated public submission
 11. Final booking and WhatsApp CTA
 12. Footer
 
-The design brief includes testimonials visually, but testimonials are not confirmed client content. The section must remain disabled or clearly absent until authentic, approved testimonials exist.
+The Reviews section renders only authentic database records approved by an administrator. Pending, rejected, and archived submissions remain hidden, and an empty approved set never produces placeholder cards or fabricated aggregate ratings. Protected moderation lives at `/admin/reviews`, with full records at `/admin/reviews/[reviewId]`; neither route is locale-prefixed or indexable.
 
 **Primary CTA**
 

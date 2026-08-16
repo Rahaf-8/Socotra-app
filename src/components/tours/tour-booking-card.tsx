@@ -14,8 +14,8 @@ export function TourBookingCard({ tour, bookingHref, whatsappHref, locale, label
       <p className="text-xs font-bold uppercase tracking-[0.16em] text-ocean">{tour.packageLabel}</p>
       <h2 className="mt-3 font-display text-3xl font-semibold text-charcoal">{tour.title}</h2>
       <dl className="mt-5 space-y-3 border-y border-warm-line py-5 text-sm">
-        <div className="flex justify-between gap-4"><dt className="text-charcoal/58">{labels.duration}</dt><dd className="font-bold">{tour.durationLabel}</dd></div>
-        <div className="flex justify-between gap-4"><dt className="text-charcoal/58">{labels.pricing}</dt><dd className="text-end font-bold">{lowest ? `${labels.from} ${formatMoney(lowest.pricePerPerson, lowest.currency, locale)}` : tour.pricingAvailabilityLabel}</dd></div>
+        <div className="grid grid-cols-2 gap-4"><dt className="text-charcoal/58">{labels.duration}</dt><dd className="min-w-0 break-words text-end font-bold">{tour.durationLabel}</dd></div>
+        <div className="grid grid-cols-2 gap-4"><dt className="text-charcoal/58">{labels.pricing}</dt><dd className="min-w-0 break-words text-end font-bold">{lowest ? `${labels.from} ${formatMoney(lowest.pricePerPerson, lowest.currency, locale)}` : tour.pricingAvailabilityLabel}</dd></div>
       </dl>
       <div className="mt-6 grid gap-3">
         <Link href={bookingHref} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-ocean px-6 text-sm font-bold text-white outline-none hover:bg-deep-ocean focus-visible:ring-2 focus-visible:ring-ocean focus-visible:ring-offset-2">{labels.book}<ArrowRight aria-hidden="true" className="size-4 rtl:rotate-180" /></Link>

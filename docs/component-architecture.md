@@ -626,7 +626,11 @@ The renderer should use an explicit map from `HomepageSectionKey` to known compo
 
 ### `Testimonials`
 
-Testimonials are not confirmed client content. Do not render this component publicly until authentic content and publishing permission are provided. A future component may be planned, but Version 1 implementation must not invent quotes, identities, ratings, or portraits.
+The homepage Reviews section now receives approved-only view models and aggregates from a server-only Prisma repository and includes a small React Hook Form submission component. The controlled radio-star value is the submitted integer; shared Zod validation runs in the browser and Server Action before the repository creates a server-owned pending record. Submitted reviews remain pending until an authenticated administrator approves them. Protected list/detail Server Components support filtered moderation, archival, and confirmed deletion. No placeholder identities, ratings, or quotes render publicly, and reviewer email is excluded from the public DTO.
+
+### Administrator image management
+
+`AdminImagePicker` is the reusable Client Component for Gallery, Tour hero/card, Tour gallery, and itinerary images. It owns the native file picker, revocable object-URL preview, pending/error UI, and upload call; the containing React Hook Form owns the final URL/public-ID fields. The authenticated Route Handler delegates to one server-only Cloudinary adapter and ownership registry. Gallery/Tour Server Actions remain responsible for transactional entity persistence and post-commit replacement cleanup.
 
 ### `FinalBookingCTA`
 

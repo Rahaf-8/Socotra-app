@@ -1,26 +1,17 @@
-import type { BookingRequestInput } from "@/lib/validation/booking-request";
+"use server";
 
-export type BookingRequestSubmission = BookingRequestInput & {
-  selectedPackageTitle: string;
-  displayedPricingTier?: {
-    label: string;
-    pricePerPerson: number;
-    currency: string;
-  };
-};
+import { revalidatePath } from "next/cache";
 
-export type BookingRequestResult =
-  | { success: true }
-  | { success: false; message: string };
+import type { Locale } from "@/i18n/config";
+import { persistBookingRequest, type BookingSubmissionResult } from "@/lib/requests/request-submission";
 
-/**
- * Temporary in-browser boundary. It deliberately does not persist or transmit
- * personal data. Replace this implementation with the approved server/API
- * operation when booking storage is implemented.
- */
-export async function submitBookingRequest(
-  request: BookingRequestSubmission,
-): Promise<BookingRequestResult> {
-  void request;
-  return { success: true };
+export type BookingRequestResult = BookingSubmissionResult;
+
+export async function submitBookingRequest(input: unknown, locale: Locale): Promise<BookingRequestResult> {
+  const result = await persistBookingRequest(input, locale);
+  if (result.success) {
+    revalidatePath("/admin/booking-requests");
+    revalidatePath("/admin/dashboard");
+  }
+  return result;
 }

@@ -196,7 +196,7 @@ export function NavbarClient({
 
       <div
         id="mobile-navigation"
-        className={`absolute inset-x-0 top-full origin-top border-b border-warm-line bg-white text-charcoal shadow-soft transition-[opacity,transform,visibility] duration-300 lg:hidden ${
+        className={`absolute inset-x-0 top-full max-h-[calc(100dvh-5rem)] origin-top overflow-y-auto overscroll-contain border-b border-warm-line bg-white text-charcoal shadow-soft transition-[opacity,transform,visibility] duration-300 lg:hidden ${
           isMenuOpen
             ? "visible translate-y-0 opacity-100"
             : "invisible -translate-y-3 opacity-0"

@@ -453,17 +453,17 @@ omitted entirely from the Contact page and footer; they must not appear as
 empty cards or public “Client Information Required” values.
 
 The general enquiry form collects only name, email, enquiry type, optional
-subject, and message. React Hook Form owns interaction state and a shared Zod
-schema performs trimming, length checks, email validation, and an allowlist
-check against published enquiry types. There is currently no server action,
-API route, database storage, or email provider. The temporary client boundary
-always reports that the message was not sent and must never display a success
-state until a future server operation confirms persistence or delivery.
+subject, and message. React Hook Form owns interaction state and shared Zod
+validation performs trimming, length checks, email validation, and a published
+enquiry-type check. An authenticated-independent Server Action revalidates the
+payload and stores a `ContactRequest`; it does not send email. Administrators
+review requests separately from Contact Content, update the existing workflow,
+and keep one private plain-text note. A honeypot and a short exact-duplicate
+window provide low-complexity abuse protection.
 
-Future implementation should store contact requests separately from booking
-requests, apply server-side validation and spam/rate-limit controls, support
-email notification as a separate service, and allow administrators to review
-and update request status.
+Email replies remain manual `mailto:` handoffs. The approved Contact form does
+not collect a phone number, so Contact Requests do not currently create
+WhatsApp actions. Future provider notifications remain a separate service.
 
 ## 17. Instagram Integration Requirements
 
@@ -1098,3 +1098,15 @@ Administrators are created explicitly with `npm run admin:create` and reset with
 Tours are the first database-managed public content domain. Protected routes at `/admin/tours`, `/admin/tours/new`, and `/admin/tours/[tourId]/edit` manage shared business fields, English and Arabic translations, prices, itinerary days, included/excluded/required-extra records, image records, ordering, featured state, and publication status.
 
 Public Home featured tours, Tours listing/details, and Booking package options read published records through a server-only Prisma repository. Mutations are transactional and revalidate both locale home/list/detail/booking paths plus the admin list/dashboard. Image management is record-only; no upload or storage integration exists. Static bilingual Tour modules remain deterministic seed input, not the public runtime source.
+
+## Customer review system
+
+The homepage Reviews section no longer publishes placeholder reviews or fabricated aggregate ratings. Public English and Arabic forms store the reviewer name, private email, 1–5 rating, unmodified plain-text message, submission locale, and a default `pending` moderation status. Only approved records for the current locale are queried publicly; reviewer email and moderation data remain protected.
+
+Administrators use `/admin/reviews` and `/admin/reviews/[reviewId]` to approve, reject, archive, or deliberately delete records. Rejected and archived records remain preserved and hidden; permanent deletion requires explicit confirmation. Every moderation mutation calls `requireAdmin()`, validates allow-listed identifiers/statuses, and revalidates the protected dashboard/list/detail and both locale homepages. No customer account, notification provider, social login, upload, payment, or automated messaging is part of this workflow.
+
+## Cloudinary image management
+
+Gallery and Tour administrators use a shared upload-first image picker backed by authenticated server-side Cloudinary uploads. Supported uploads are JPEG/JFIF, PNG, WebP, and AVIF up to 12 MB. English and Arabic alt text/captions remain independently authored Prisma content; filenames are never promoted to public alt text. Tour cards use their distinct card image when present and otherwise retain the existing hero fallback. Tour gallery and itinerary images render responsively on public detail pages.
+
+Existing local paths and approved third-party URLs remain valid. Only assets registered by this application with a stored trusted public ID are eligible for Cloudinary destruction. Upload and database operations are deliberately sequenced because Cloudinary cannot participate in a Prisma transaction. Deployment requires the three documented server-only Cloudinary variables; no upload preset or public upload endpoint exists.

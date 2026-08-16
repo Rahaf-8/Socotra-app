@@ -1,12 +1,10 @@
-import Image from "next/image";
-import Link from "next/link";
 import { Quote, Star } from "lucide-react";
 
 import type { Review } from "@/types/review";
 
 type ReviewCardProps = {
   review: Review;
-  labels: { outOfFive: string; readOn: string };
+  labels: { outOfFive: string; submittedBy: string };
 };
 
 export function ReviewCard({ review, labels }: ReviewCardProps) {
@@ -36,56 +34,27 @@ export function ReviewCard({ review, labels }: ReviewCardProps) {
         />
       </div>
 
-      {review.reviewTitle ? (
-        <h3 className="mt-6 font-display text-[1.75rem] font-semibold leading-tight tracking-[-0.015em] text-charcoal">
-          {review.reviewTitle}
-        </h3>
-      ) : null}
-      <p className="mt-4 line-clamp-6 flex-1 text-[0.95rem] leading-7 text-charcoal/70">
-        “{review.reviewText}”
+      <p className="mt-6 line-clamp-6 flex-1 break-words whitespace-pre-wrap text-[0.95rem] leading-7 text-charcoal/70">
+        “{review.message}”
       </p>
 
       <footer className="mt-7 border-t border-warm-line/70 pt-5">
         <div className="flex items-center gap-3">
-          {review.guestImage ? (
-            <Image
-              src={review.guestImage.src}
-              alt={review.guestImage.alt}
-              width={44}
-              height={44}
-              className="size-11 rounded-full object-cover"
-            />
-          ) : (
-            <span
+          <span
               aria-hidden="true"
               className="flex size-11 items-center justify-center rounded-full bg-soft-sand font-display text-lg font-semibold text-palm"
             >
-              {review.guestName.charAt(0)}
+              {review.name.charAt(0)}
             </span>
-          )}
           <div className="min-w-0">
             <p className="truncate text-sm font-bold text-charcoal">
-              {review.guestName}
+              {review.name}
             </p>
             <p className="mt-0.5 text-xs text-charcoal/52">
-              {[review.guestCountry, review.travelDate]
-                .filter(Boolean)
-                .join(" · ") || review.source}
+              {labels.submittedBy}
             </p>
           </div>
         </div>
-
-        {review.sourceUrl ? (
-          <Link
-            href={review.sourceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${labels.readOn} ${review.source}: ${review.guestName}`}
-            className="mt-4 inline-flex min-h-8 items-center text-xs font-bold text-deep-ocean outline-none transition-colors hover:text-ocean focus-visible:ring-2 focus-visible:ring-ocean focus-visible:ring-offset-2"
-          >
-            {labels.readOn} {review.source}
-          </Link>
-        ) : null}
       </footer>
     </article>
   );

@@ -7,7 +7,6 @@ import type { ReviewsSectionContent } from "@/components/home/reviews-section";
 import type { WhySocotraContent } from "@/components/home/why-socotra";
 import type { Locale } from "@/i18n/config";
 import { localizedHref } from "@/i18n/routing";
-import type { Review, ReviewsSummaryData } from "@/types/review";
 
 export type HomeContent = {
   hero: HeroContent;
@@ -16,8 +15,6 @@ export type HomeContent = {
   flights: FlightInformationContent;
   gallery: GalleryPreviewContent;
   reviews: ReviewsSectionContent;
-  reviewsSummary: ReviewsSummaryData;
-  reviewItems: readonly Review[];
   finalCTA: CTASectionContent;
   metadata: { title: string; description: string };
 };
@@ -76,23 +73,22 @@ export function getHomeContent(locale: Locale, whatsappUrl: string): HomeContent
       placeholderNotice: ar ? "صور ونصوص تطوير مؤقتة · تتطلب موافقة العميل" : "Temporary development imagery and copy · Client approval required",
     },
     reviews: {
-      enabled: true, isPlaceholder: true,
+      enabled: true,
       eyebrow: ar ? "آراء الضيوف" : "Guest Reviews",
       heading: ar ? "حكايات مسافري سقطرى" : "Stories from Socotra Travelers",
-      description: ar ? "معاينة مؤقتة لكيفية عرض تجارب مختارة يشاركها ضيوف سابقون بعد اعتماد الآراء الأصلية." : "A temporary preview of how selected experiences shared by previous guests will appear once authentic reviews are approved.",
-      readMoreAction: { label: ar ? "قراءة المزيد من الآراء" : "Read More Reviews", href: `/${locale}/reviews` },
-      externalAction: { label: ar ? "قيّمنا على Tripadvisor" : "Review us on Tripadvisor", href: undefined },
-      placeholderNotice: ar ? "آراء وتقييمات وأعداد مؤقتة · تتطلب موافقة العميل" : "Temporary reviews, rating, and review count · Client approval required",
+      description: ar ? "اقرأ تجارب حقيقية وافق فريقنا على نشرها، أو شارك تجربتك معنا." : "Read authentic guest experiences approved by our team, or share your own experience with us.",
+      writeAction: ar ? "اكتب مراجعة" : "Write a Review",
+      emptyMessage: ar ? "لا توجد مراجعات منشورة بعد. يمكنك مشاركة تجربتك أدناه." : "There are no published reviews yet. You can share your experience below.",
+      form: {
+        title: ar ? "شارك تجربتك" : "Share your experience",
+        description: ar ? "ستراجع الإدارة مشاركتك قبل ظهورها على الموقع. لن يظهر بريدك الإلكتروني للعامة." : "Your submission will be reviewed before it appears on the website. Your email address will not be displayed publicly.",
+        name: ar ? "الاسم" : "Name", email: ar ? "البريد الإلكتروني" : "Email", rating: ar ? "التقييم بالنجوم" : "Star rating", message: ar ? "مراجعتك" : "Your review",
+        submit: ar ? "إرسال المراجعة" : "Submit Review", submitting: ar ? "جارٍ الإرسال…" : "Submitting…",
+        successTitle: ar ? "شكرًا لمشاركتك" : "Thank you for sharing",
+        successMessage: ar ? "استلمنا مراجعتك وستظهر بعد موافقة الإدارة." : "We received your review. It will appear after administrator approval.",
+        errorMessage: ar ? "تعذر إرسال المراجعة. راجع البيانات وحاول مرة أخرى." : "We could not submit your review. Check the details and try again.",
+      },
     },
-    reviewsSummary: { averageRating: 5, totalReviewCount: 120, platformName: "Tripadvisor", platformIcon: "message-circle" },
-    reviewItems: [1, 2, 3].map((number) => ({
-      id: `placeholder-review-${number}`,
-      guestName: ar ? `ضيف تجريبي ${number}` : `Placeholder Guest 0${number}`,
-      rating: 5,
-      reviewTitle: ar ? ["رحلة لا تُنسى في الجزيرة", "تخطيط مدروس من البداية إلى النهاية", "تجربة طبيعية استثنائية"][number - 1] : ["A memorable island journey", "Thoughtfully planned from start to finish", "An extraordinary natural experience"][number - 1],
-      reviewText: ar ? "نص مراجعة مؤقت يوضح طريقة عرض تجربة ضيف معتمدة. يجب استبداله بمراجعة أصلية ومصرح بنشرها قبل الإطلاق." : "Temporary review copy illustrating how an approved guest experience will appear. Replace this text with an authentic, permissioned client review before publication.",
-      source: "Tripadvisor", featured: true, published: true, displayOrder: number,
-    })),
     finalCTA: {
       enabled: true,
       eyebrow: ar ? "مغامرتك بانتظارك" : "Your Adventure Awaits",

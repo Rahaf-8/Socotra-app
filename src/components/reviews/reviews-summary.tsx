@@ -1,15 +1,5 @@
-import type { LucideIcon } from "lucide-react";
-import { MessageCircle, Star } from "lucide-react";
-
-import type {
-  ReviewPlatformIconKey,
-  ReviewsSummaryData,
-} from "@/types/review";
-
-const platformIcons = {
-  "message-circle": MessageCircle,
-  star: Star,
-} satisfies Record<ReviewPlatformIconKey, LucideIcon>;
+import { Star } from "lucide-react";
+import type { ReviewsSummaryData } from "@/types/review";
 
 type ReviewsSummaryProps = {
   summary: ReviewsSummaryData;
@@ -17,26 +7,23 @@ type ReviewsSummaryProps = {
 };
 
 export function ReviewsSummary({ summary, labels }: ReviewsSummaryProps) {
-  const PlatformIcon = summary.platformIcon
-    ? platformIcons[summary.platformIcon]
-    : null;
-
+  const hasReviews = summary.totalReviewCount > 0;
   return (
     <div className="flex flex-col gap-5 border-y border-warm-line py-6 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-end gap-4">
         <p className="font-display text-6xl font-semibold leading-none tracking-[-0.04em] text-charcoal">
-          {summary.averageRating.toFixed(1)}
+          {hasReviews ? summary.averageRating.toFixed(1) : "—"}
         </p>
         <div className="pb-1">
           <div
-            aria-label={`${summary.averageRating} ${labels.outOfFive}`}
+            aria-label={hasReviews ? `${summary.averageRating} ${labels.outOfFive}` : `${labels.basedOn} 0 ${labels.reviews}`}
             className="flex gap-1 text-ocean"
           >
             {Array.from({ length: 5 }, (_, index) => (
               <Star
                 key={index}
                 aria-hidden="true"
-                className="size-4 fill-current"
+                className={index < Math.round(summary.averageRating) ? "size-4 fill-current" : "size-4 opacity-30"}
               />
             ))}
           </div>
@@ -46,16 +33,6 @@ export function ReviewsSummary({ summary, labels }: ReviewsSummaryProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 text-sm font-bold text-charcoal">
-        {PlatformIcon ? (
-          <PlatformIcon
-            aria-hidden="true"
-            className="size-4 text-ocean"
-            strokeWidth={1.8}
-          />
-        ) : null}
-        {summary.platformName}
-      </div>
     </div>
   );
 }

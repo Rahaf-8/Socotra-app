@@ -484,9 +484,7 @@ static adapter; it does not call Prisma or an API yet.
 
 ### 5.1 Submit Booking Request
 
-**Mechanism:** Route Handler called by the first-party booking form.
-
-This explicit boundary is recommended for rate limiting, abuse protection, HTTP response semantics, and future reuse. A Server Action is also technically viable, but it must implement identical protections. Use one mutation path only.
+**Mechanism:** Server Action called by the first-party booking form. It delegates to a server-only persistence service so validation and storage have one mutation path.
 
 **Input**
 
@@ -589,7 +587,7 @@ It is not a browser-side call using a secret WhatsApp API credential.
 - Database writes through service/repository
 - Privacy and retention policy required before launch
 
-### 5.2 Submit Contact Request (future; not implemented)
+### 5.2 Submit Contact Request
 
 **Mechanism:** Server Action is recommended because the operation originates
 from the first-party Contact form and has no external webhook requirement.
@@ -1059,3 +1057,15 @@ No content, Contact, Booking, upload, email, or payment API is introduced by the
 Tours CRUD uses authenticated Server Actions rather than new public business APIs. Every mutation calls `requireAdmin()`, validates an explicit Zod payload, and executes nested writes transactionally. Slugs are normalized and unique; image references accept safe project-local paths or the already approved HTTPS image host only.
 
 Successful writes revalidate `/admin/tours`, `/admin/dashboard`, both locale home/tours/booking routes, affected detail routes, and the sitemap path. No global cache disable, upload endpoint, payment endpoint, or unrelated content API is included.
+
+## Review submission and moderation
+
+The homepage Reviews section uses direct server-side Prisma reads scoped to `status = approved` and the current `en` or `ar` submission locale. `submitReview` is a public Server Action with bilingual Zod validation, a hidden honeypot, bounded fields, and restrained duplicate suppression. It accepts no status input and always creates `pending` records.
+
+`/admin/reviews` and `/admin/reviews/[reviewId]` are outside locale prefixes and call the authoritative `requireAdmin()` guard. Their moderation Server Actions allow only `pending`, `approved`, `rejected`, or `archived`, validate record IDs, and require explicit confirmation before permanent deletion. Rejection and archival preserve the record while excluding it from public reads. Review mutations revalidate the list, affected detail, dashboard, `/en`, and `/ar`. Reviewer messages render as plain text; reviewer email is selected only for protected administrator views. Notification providers remain future work.
+
+## Authenticated image uploads
+
+`POST /api/admin/images` accepts multipart data only from a current active administrator without a forced password change. It validates an allow-listed context and raster file signature, enforces a 12 MB maximum, uploads through the server-only Cloudinary SDK, and returns only secure URL, owned public ID, dimensions, format, and original filename. `DELETE /api/admin/images` can discard only an unclaimed asset found in the server-owned registry; it cannot delete arbitrary IDs or claimed entity assets.
+
+Entity Server Actions validate uploaded URL/public-ID pairs against unclaimed registry rows, save metadata in their existing Prisma transaction, and claim the asset in that transaction. Replaced or removed IDs are resolved from existing database records and deleted only after successful persistence. Provider failures return safe messages and never expose credentials or raw provider errors.

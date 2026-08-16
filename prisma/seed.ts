@@ -571,6 +571,7 @@ async function main() {
     enquiryTypes: await prisma.contactEnquiryType.count(),
     bookingRequests: await prisma.bookingRequest.count(),
     contactRequests: await prisma.contactRequest.count(),
+    reviews: await prisma.review.count(),
   };
   console.info("Seed complete", counts);
 }

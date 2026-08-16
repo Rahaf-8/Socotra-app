@@ -41,6 +41,7 @@ export function ContactForm({
       enquiryType: "",
       subject: "",
       message: "",
+      website: "",
     },
   });
 
@@ -50,7 +51,7 @@ export function ContactForm({
 
   async function onSubmit(values: ContactRequestInput) {
     clearErrors();
-    const validation = createContactRequestSchema(locale).safeParse(values);
+    const validation = createContactRequestSchema(locale, visibleEnquiryTypes.map((option) => option.value)).safeParse(values);
 
     if (!validation.success) {
       validation.error.issues.forEach((issue) => {
@@ -62,14 +63,11 @@ export function ContactForm({
       return;
     }
 
-    const result = await submitContactRequest(validation.data);
+    const result = await submitContactRequest(validation.data, locale);
 
     if (!result.success) {
       setError("root", {
-        message:
-          result.code === "NOT_CONFIGURED"
-            ? content.unavailableMessage
-            : content.errorMessage,
+        message: content.errorMessage,
       });
       return;
     }
@@ -104,6 +102,9 @@ export function ContactForm({
       noValidate
       className="rounded-[1.75rem] border border-warm-line bg-white p-6 shadow-soft sm:p-8"
     >
+      <div className="sr-only" aria-hidden="true">
+        <label>Website<input {...register("website")} tabIndex={-1} autoComplete="off" /></label>
+      </div>
       {content.eyebrow ? (
         <p className="text-xs font-bold uppercase tracking-[0.22em] text-ocean">
           {content.eyebrow}

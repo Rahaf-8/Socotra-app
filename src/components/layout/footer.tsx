@@ -95,7 +95,7 @@ export function Footer({ navigation, settings, locale, labels }: FooterProps) {
                     aria-hidden="true"
                     className="mt-0.5 size-4 shrink-0 text-ocean-light"
                   />
-                  <span>
+                  <span className="min-w-0 break-words">
                     <span className="sr-only">{label}: </span>
                     {settings.contact[key]}
                   </span>

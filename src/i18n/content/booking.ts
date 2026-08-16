@@ -19,7 +19,7 @@ export function getBookingContent(locale: Locale) {
       submit: ar ? "إرسال طلب الحجز" : "Submit Booking Request",
       submitting: ar ? "جارٍ الإرسال..." : "Submitting…",
       successTitle: ar ? "شكرًا لك!" : "Thank you!",
-      successMessage: ar ? "لقد استلمنا طلب حجزك. سيتواصل معك فريقنا لتأكيد التوافر وتقديم تعليمات الدفع." : "We have received your booking request. Our team will contact you shortly to confirm availability and provide payment instructions.",
+      successMessage: ar ? "لقد استلمنا طلب حجزك وسيقوم فريقنا بمراجعته والتواصل معك. لم يتم تأكيد الحجز بعد." : "We received your booking request. Our team will review it and contact you; your booking is not yet confirmed.",
       invalidTour: ar ? "اختر باقة رحلة صالحة." : "Select a valid tour package.",
     },
     steps: [

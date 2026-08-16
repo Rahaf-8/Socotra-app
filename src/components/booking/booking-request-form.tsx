@@ -59,6 +59,7 @@ export function BookingRequestForm({
       adults: 1,
       children: 0,
       specialRequirements: "",
+      website: "",
     },
   });
 
@@ -81,16 +82,7 @@ export function BookingRequestForm({
       setError("tourSlug", { message: content.invalidTour });
       return;
     }
-    const displayedPricingTier = selectedTour.pricingTiers?.length
-      ? [...selectedTour.pricingTiers].sort(
-          (a, b) => a.pricePerPerson - b.pricePerPerson,
-        )[0]
-      : undefined;
-    const result = await submitBookingRequest({
-      ...validation.data,
-      selectedPackageTitle: selectedTour.title,
-      displayedPricingTier,
-    });
+    const result = await submitBookingRequest(validation.data, locale);
     if (!result.success) {
       setError("root", { message: result.message });
       return;
@@ -125,6 +117,9 @@ export function BookingRequestForm({
       noValidate
       className="rounded-[1.75rem] border border-warm-line bg-white p-6 shadow-soft sm:p-8"
     >
+      <div className="sr-only" aria-hidden="true">
+        <label>Website<input {...register("website")} tabIndex={-1} autoComplete="off" /></label>
+      </div>
       <h2 className="font-display text-4xl font-semibold text-charcoal">
         {content.title}
       </h2>
