@@ -1,9 +1,12 @@
 import "server-only";
 
+import { unstable_cache } from "next/cache";
+
 import type { Locale } from "@/i18n/config";
 import { prisma } from "@/lib/prisma";
+import { bookingTourOptionsCacheTag } from "@/lib/tours/tour-cache";
 import type { TourAdminInput } from "@/lib/validation/tour-admin";
-import type { Tour } from "@/types/tour";
+import type { BookingTourOption, Tour } from "@/types/tour";
 
 const fullRelations = { translations: true, pricingTiers: { include: { translations: true }, orderBy: { displayOrder: "asc" as const } }, listItems: { include: { translations: true }, orderBy: { displayOrder: "asc" as const } }, itineraryDays: { include: { translations: true }, orderBy: { displayOrder: "asc" as const } }, images: { include: { translations: true }, orderBy: { displayOrder: "asc" as const } } };
 
@@ -34,6 +37,38 @@ function toPublicTour(record: TourRecord, locale: Locale, useCardImage = false):
 export async function getPublishedTours(locale: Locale) {
   const records = await prisma.tour.findMany({ where: { status: "published", translations: { some: { locale } } }, include: fullRelations, orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }] });
   return records.map((record) => toPublicTour(record, locale, true)).filter((tour): tour is Tour => Boolean(tour));
+}
+
+const getCachedPublishedTourBookingOptions = unstable_cache(
+  async (locale: Locale): Promise<BookingTourOption[]> => {
+    const records = await prisma.tour.findMany({
+      where: {
+        status: "published",
+        translations: { some: { locale } },
+      },
+      orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }],
+      select: {
+        slug: true,
+        translations: {
+          where: { locale },
+          take: 1,
+          select: { title: true, packageLabel: true },
+        },
+      },
+    });
+
+    return records.map((record) => ({
+      slug: record.slug,
+      title: record.translations[0]!.title,
+      packageLabel: record.translations[0]!.packageLabel,
+    }));
+  },
+  ["published-tour-booking-options"],
+  { tags: [bookingTourOptionsCacheTag], revalidate: 3600 },
+);
+
+export function getPublishedTourBookingOptions(locale: Locale) {
+  return getCachedPublishedTourBookingOptions(locale);
 }
 
 export async function getPublishedTourBySlug(locale: Locale, slug: string) {

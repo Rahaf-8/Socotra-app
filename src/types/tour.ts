@@ -15,6 +15,12 @@ export type TourPricingTier = {
   displayOrder: number;
 };
 
+export type BookingTourOption = {
+  slug: string;
+  packageLabel: string;
+  title: string;
+};
+
 export type TourExtra = {
   id: string;
   label: string;

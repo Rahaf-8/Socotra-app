@@ -9,20 +9,10 @@ import {
   type BookingRequestInput,
 } from "@/lib/validation/booking-request";
 import type { Locale } from "@/i18n/config";
-
-type TourOption = {
-  slug: string;
-  packageLabel: string;
-  title: string;
-  pricingTiers?: readonly {
-    label: string;
-    pricePerPerson: number;
-    currency: string;
-  }[];
-};
+import type { BookingTourOption } from "@/types/tour";
 
 type BookingRequestFormProps = {
-  tours: readonly TourOption[];
+  tours: readonly BookingTourOption[];
   initialTourSlug?: string;
   locale: Locale;
   content: {

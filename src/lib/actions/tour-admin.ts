@@ -1,12 +1,13 @@
 "use server";
 
 import { randomUUID } from "node:crypto";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { requireAdmin } from "@/lib/auth/admin";
 import { deleteOwnedCloudinaryAsset, validateUnclaimedAssets } from "@/lib/images/asset-registry";
 import { prisma } from "@/lib/prisma";
+import { bookingTourOptionsCacheTag } from "@/lib/tours/tour-cache";
 import { tourAdminSchema, type TourAdminInput } from "@/lib/validation/tour-admin";
 
 export type TourActionState = { ok: boolean; id?: string; error?: string; fieldErrors?: Record<string, string[]> };
@@ -14,6 +15,7 @@ const clean = (value?: string) => value?.trim() || null;
 const id = (value: string | undefined, prefix: string) => value || `${prefix}-${randomUUID()}`;
 
 function revalidateTourPaths(slug: string, previousSlug?: string) {
+  updateTag(bookingTourOptionsCacheTag);
   for (const locale of ["en", "ar"]) {
     revalidatePath(`/${locale}`);
     revalidatePath(`/${locale}/tours`);
