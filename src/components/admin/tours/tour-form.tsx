@@ -37,7 +37,10 @@ export function TourForm({ initialValue }: { initialValue: TourAdminInput }) {
   const cardImagePublicId = useWatch({ control: form.control, name: "cardImagePublicId", defaultValue: initialValue.cardImagePublicId ?? "" }) ?? "";
   const watchedItinerary = useWatch({ control: form.control, name: "itineraryDays" });
   const watchedImages = useWatch({ control: form.control, name: "images" });
-  const numberOrNull = { setValueAs: (value: string) => value === "" ? null : Number(value) };
+  const numberOrNull = {
+    setValueAs: (value: string | number | null | undefined) =>
+      value === "" || value == null ? null : Number(value),
+  };
 
   const submit = form.handleSubmit((values) => startTransition(async () => {
     const response = await saveTour(values);

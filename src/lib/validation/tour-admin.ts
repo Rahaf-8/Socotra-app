@@ -42,6 +42,8 @@ export const tourAdminSchema = z.object({
   unique(data.excluded.map((item) => item.displayOrder), "excluded", "Excluded-item order");
   unique(data.requiredExtras.map((item) => item.displayOrder), "requiredExtras", "Required-extra order");
   unique(data.images.map((item) => item.displayOrder), "images", "Image order");
+  const listItemIds = [...data.included, ...data.excluded, ...data.requiredExtras].map((item) => item.id).filter((item): item is string => Boolean(item));
+  if (new Set(listItemIds).size !== listItemIds.length) context.addIssue({ code: "custom", path: ["included"], message: "Tour list item IDs must be unique." });
   data.pricingTiers.forEach((tier, index) => { if (tier.minGuests && tier.maxGuests && tier.minGuests > tier.maxGuests) context.addIssue({ code: "custom", path: ["pricingTiers", index, "maxGuests"], message: "Maximum guests must be at least the minimum." }); });
 });
 
