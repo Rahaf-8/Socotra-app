@@ -16,9 +16,9 @@ export const siteSettingsPlaceholder: PublicSiteSettings = {
   contact: {
     email: CLIENT_INFORMATION_REQUIRED,
     phone: CLIENT_INFORMATION_REQUIRED,
-    whatsapp: CLIENT_INFORMATION_REQUIRED,
+    whatsapp: "+967 782 333 969",
     whatsappUrl:
-      "https://wa.me/201037663199?text=Hello%2C%20I%20am%20interested%20in%20planning%20a%20trip%20to%20Socotra.%20Please%20send%20me%20more%20information.",
+      "https://wa.me/967782333969?text=Hello%2C%20I%20am%20interested%20in%20planning%20a%20trip%20to%20Socotra.%20Please%20send%20me%20more%20information.",
     address: CLIENT_INFORMATION_REQUIRED,
   },
   socialLinks: [{ label: CLIENT_INFORMATION_REQUIRED, href: null }],
