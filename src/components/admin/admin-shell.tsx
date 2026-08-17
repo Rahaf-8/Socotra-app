@@ -80,7 +80,7 @@ function NavigationContent({
                   href={item.href}
                   onClick={onNavigate}
                   aria-current={active ? "page" : undefined}
-                  className={`relative flex min-h-12 items-center rounded-xl border-s-2 px-4 py-2.5 font-semibold text-white outline-none transition-colors hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal ${
+                  className={`relative flex min-h-12 items-center rounded-xl px-4 py-2.5 font-semibold text-white outline-none transition-colors hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal ${
                     active
                       ? "border-ocean-light bg-white/10"
                       : "border-transparent"
