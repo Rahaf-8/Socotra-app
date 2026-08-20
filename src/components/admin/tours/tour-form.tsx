@@ -20,7 +20,7 @@ function StatusSelect({ registration }: { registration: ReturnType<ReturnType<ty
   return <select {...registration} className={input}><option value="draft">Draft</option><option value="published">Published</option><option value="archived">Archived</option></select>;
 }
 
-export function TourForm({ initialValue }: { initialValue: TourAdminInput }) {
+export function TourForm({ initialValue, packageTypes }: { initialValue: TourAdminInput; packageTypes: { key: string; label: string; active: boolean }[] }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [result, setResult] = useState<TourActionState>({ ok: false });
@@ -70,7 +70,7 @@ export function TourForm({ initialValue }: { initialValue: TourAdminInput }) {
     <fieldset className={panel}><legend className="px-2 font-display text-2xl font-semibold">Shared business data</legend>
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         <label className="text-sm font-semibold">Slug<input {...form.register("slug")} className={`${input} mt-2`} /></label>
-        <label className="text-sm font-semibold">Package type<select {...form.register("packageType")} className={`${input} mt-2`}><option value="group">Group</option><option value="camping">Camping</option><option value="comfy">Comfy</option></select></label>
+        <label className="text-sm font-semibold">Package type<select {...form.register("packageType")} className={`${input} mt-2`}>{packageTypes.map((value) => <option key={value.key} value={value.key}>{value.label}{value.active ? "" : " (inactive — current tour only)"}</option>)}</select><Link href="/admin/tours/package-types" className="mt-2 inline-block text-xs font-semibold text-ocean underline">Manage package types</Link></label>
         <label className="text-sm font-semibold">Publication status<span className="mt-2 block"><StatusSelect registration={form.register("status")} /></span></label>
         <label className="text-sm font-semibold">Duration days<input type="number" {...form.register("durationDays", numberOrNull)} className={`${input} mt-2`} /></label>
         <label className="text-sm font-semibold">Display order<input type="number" {...form.register("displayOrder", { valueAsNumber: true })} className={`${input} mt-2`} /></label>

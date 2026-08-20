@@ -75,6 +75,7 @@ export async function saveTour(
         select: {
           id: true,
           slug: true,
+          packageType: true,
           heroImagePublicId: true,
           cardImagePublicId: true,
           itineraryDays: {
@@ -98,6 +99,11 @@ export async function saveTour(
       ok: false,
       error: "This tour no longer exists.",
     };
+  }
+
+  const selectedPackageType = await prisma.tourPackageType.findUnique({ where: { key: data.packageType }, select: { status: true } });
+  if (!selectedPackageType || (selectedPackageType.status !== "published" && existing?.packageType !== data.packageType)) {
+    return { ok: false, error: "Select an active package type.", fieldErrors: { packageType: ["The selected package type is not available."] } };
   }
 
   const slugConflict = await prisma.tour.findFirst({

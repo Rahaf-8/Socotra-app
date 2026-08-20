@@ -22,7 +22,7 @@ const localizedLabel = z.object({ en: text("English label", 500), ar: text("Arab
 export const tourAdminSchema = z.object({
   id: z.string().trim().max(100).optional(),
   slug: z.string().trim().toLowerCase().min(1).max(100).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase letters, numbers, and single hyphens only."),
-  packageType: z.enum(["group", "camping", "comfy"]), durationDays: z.number().int().min(1).max(365).nullable(),
+  packageType: z.string().trim().toLowerCase().min(1).max(80).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/), durationDays: z.number().int().min(1).max(365).nullable(),
   heroImagePath: imageReferenceSchema, heroImagePublicId: optionalPublicId, cardImagePath: z.union([imageReferenceSchema, z.literal("")]), cardImagePublicId: optionalPublicId, featured: z.boolean(), status, displayOrder: order,
   needsClientConfirmation: z.boolean(), en: translation, ar: translation,
   pricingTiers: z.array(z.object({ id: z.string().optional(), minGuests: optionalGuests, maxGuests: optionalGuests, pricePerPerson: z.number().int().min(0).max(10_000_000), currency: z.string().trim().regex(/^[A-Z]{3}$/), displayOrder: order, status, en: z.object({ label: text("English pricing label", 160), note: optionalText(500) }), ar: z.object({ label: text("Arabic pricing label", 160), note: optionalText(500) }) })).max(30),

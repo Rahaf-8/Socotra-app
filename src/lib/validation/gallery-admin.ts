@@ -28,7 +28,8 @@ export const galleryItemSchema = z.object({
   ar: translation,
 });
 
-export const galleryCategorySchema = z.object({ id, displayOrder: order, status, en: text(1, 120), ar: text(1, 120) });
+const key = z.string().trim().toLowerCase().min(1).max(80).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase letters, numbers, and single hyphens only.");
+export const galleryCategorySchema = z.object({ id: id.optional(), key, displayOrder: order, status, en: text(1, 120), ar: text(1, 120) });
 
 export type GalleryItemInput = z.infer<typeof galleryItemSchema>;
 export type GalleryCategoryInput = z.infer<typeof galleryCategorySchema>;

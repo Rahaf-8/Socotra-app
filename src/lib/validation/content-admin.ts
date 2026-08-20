@@ -14,7 +14,8 @@ const answerBlock = z.discriminatedUnion("type", [
 ]);
 
 export const faqInputSchema = z.object({ id: id.optional(), categoryId: id, displayOrder: order, status: statusSchema, en: z.object({ question: short.max(300), answer: z.array(answerBlock).min(1).max(40) }), ar: z.object({ question: short.max(300), answer: z.array(answerBlock).min(1).max(40) }) });
-export const faqCategorySchema = z.object({ id, displayOrder: order, status: statusSchema, en: short, ar: short });
+const key = z.string().trim().toLowerCase().min(1).max(80).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use lowercase letters, numbers, and single hyphens only.");
+export const faqCategorySchema = z.object({ id: id.optional(), key, displayOrder: order, status: statusSchema, en: short, ar: short });
 
 const nullableText = (maximum: number) => z.string().trim().max(maximum);
 const safeInternalHref = z.string().trim().max(500).refine((value) => value === "" || /^\/(?!\/)[A-Za-z0-9/_?=&%#.-]*$/.test(value), "Use a safe internal path.");

@@ -54,9 +54,20 @@ export async function saveGalleryCategory(input: unknown): Promise<GalleryAction
   await requireAdmin();
   const parsed = galleryCategorySchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "Review the category fields.", fieldErrors: fieldErrors(parsed.error) };
-  const data = parsed.data;
-  try { await prisma.$transaction(async (tx) => { await tx.galleryCategory.update({ where: { id: data.id }, data: { displayOrder: data.displayOrder, status: data.status } }); for (const locale of locales) await tx.galleryCategoryTranslation.upsert({ where: { categoryId_locale: { categoryId: data.id, locale } }, update: { label: data[locale] }, create: { id: `${data.id}-${locale}`, categoryId: data.id, locale, label: data[locale] } }); }); }
-  catch { return { ok: false, error: "The Gallery category could not be saved." }; }
+  const data = parsed.data, categoryId = data.id ?? `gallery-category-${crypto.randomUUID()}`;
+  if (data.key === "all" && !data.id) return { ok: false, error: "The reserved all category cannot be created." };
+  try { await prisma.$transaction(async (tx) => { await tx.galleryCategory.upsert({ where: { id: categoryId }, update: { displayOrder: data.displayOrder, status: data.status }, create: { id: categoryId, key: data.key, displayOrder: data.displayOrder, status: data.status } }); for (const locale of locales) await tx.galleryCategoryTranslation.upsert({ where: { categoryId_locale: { categoryId, locale } }, update: { label: data[locale] }, create: { id: `${categoryId}-${locale}`, categoryId, locale, label: data[locale] } }); }); }
+  catch { return { ok: false, error: "The Gallery category could not be saved. Its key must be unique." }; }
   revalidateGallery();
-  return { ok: true, id: data.id };
+  return { ok: true, id: categoryId };
+}
+
+export async function deleteGalleryCategory(formData: FormData) {
+  await requireAdmin(); const id = String(formData.get("id") ?? "");
+  if (!id || formData.get("confirm") !== "on") redirect("/admin/gallery?result=category-confirmation-required");
+  const category = await prisma.galleryCategory.findUnique({ where: { id }, select: { key: true, _count: { select: { items: true } } } });
+  if (!category) redirect("/admin/gallery?result=category-missing");
+  if (category.key === "all") redirect("/admin/gallery?result=category-structural");
+  if (category._count.items) redirect("/admin/gallery?result=category-in-use");
+  await prisma.galleryCategory.delete({ where: { id } }); revalidateGallery(); redirect("/admin/gallery?result=category-deleted");
 }

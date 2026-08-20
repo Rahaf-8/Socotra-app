@@ -42,9 +42,18 @@ export async function deleteFaq(formData: FormData) {
 export async function saveFaqCategory(input: unknown): Promise<ContentActionState> {
   await requireAdmin(); const parsed = faqCategorySchema.safeParse(input);
   if (!parsed.success) return { ok: false, error: "Review the category fields.", fieldErrors: fields(parsed.error) };
-  const data = parsed.data;
-  try { await prisma.$transaction(async (tx) => { await tx.faqCategory.update({ where: { id: data.id }, data: { displayOrder: data.displayOrder, status: data.status } }); for (const locale of locales) await tx.faqCategoryTranslation.upsert({ where: { categoryId_locale: { categoryId: data.id, locale } }, update: { label: data[locale] }, create: { id: `${data.id}-${locale}`, categoryId: data.id, locale, label: data[locale] } }); }); } catch { return { ok: false, error: "The category could not be saved." }; }
-  faqPaths(); return { ok: true, id: data.id };
+  const data = parsed.data, categoryId = data.id ?? `faq-category-${crypto.randomUUID()}`;
+  try { await prisma.$transaction(async (tx) => { await tx.faqCategory.upsert({ where: { id: categoryId }, update: { displayOrder: data.displayOrder, status: data.status }, create: { id: categoryId, key: data.key, displayOrder: data.displayOrder, status: data.status } }); for (const locale of locales) await tx.faqCategoryTranslation.upsert({ where: { categoryId_locale: { categoryId, locale } }, update: { label: data[locale] }, create: { id: `${categoryId}-${locale}`, categoryId, locale, label: data[locale] } }); }); } catch { return { ok: false, error: "The category could not be saved. Its key must be unique." }; }
+  faqPaths(); return { ok: true, id: categoryId };
+}
+
+export async function deleteFaqCategory(formData: FormData) {
+  await requireAdmin(); const id = String(formData.get("id") ?? "");
+  if (!id || formData.get("confirm") !== "on") redirect("/admin/faq?result=category-confirmation-required");
+  const category = await prisma.faqCategory.findUnique({ where: { id }, select: { _count: { select: { items: true } } } });
+  if (!category) redirect("/admin/faq?result=category-missing");
+  if (category._count.items) redirect("/admin/faq?result=category-in-use");
+  await prisma.faqCategory.delete({ where: { id } }); faqPaths(); redirect("/admin/faq?result=category-deleted");
 }
 
 export async function saveContentPage(input: unknown): Promise<ContentActionState> {

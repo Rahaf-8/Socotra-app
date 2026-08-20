@@ -33,6 +33,15 @@ const packageType = (slug: string) => {
 };
 
 async function seedTours() {
+  for (const value of [
+    { key: "group", displayOrder: 1, en: "Group", ar: "جماعي" },
+    { key: "camping", displayOrder: 2, en: "Camping", ar: "تخييم" },
+    { key: "comfy", displayOrder: 3, en: "Comfy", ar: "مريح" },
+  ]) {
+    await prisma.tourPackageType.upsert({ where: { key: value.key }, update: { displayOrder: value.displayOrder, status: "published" }, create: { key: value.key, displayOrder: value.displayOrder, status: "published" } });
+    for (const locale of locales) await prisma.tourPackageTypeTranslation.upsert({ where: { packageKey_locale: { packageKey: value.key, locale } }, update: { label: value[locale] }, create: { id: `tour-package-type-${value.key}-${locale}`, packageKey: value.key, locale, label: value[locale] } });
+  }
+
   const localized = Object.fromEntries(
     locales.map((locale) => [locale, getTours(locale)]),
   ) as Record<Locale, readonly Tour[]>;
