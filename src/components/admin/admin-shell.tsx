@@ -16,7 +16,6 @@ const adminNavigation = [
   { href: "/admin/tours", label: "Tours" },
   { href: "/admin/faq", label: "FAQ" },
   { href: "/admin/about", label: "About" },
-  { href: "/admin/contact", label: "Contact Content" },
   { href: "/admin/gallery", label: "Gallery" },
 ] as const;
 
