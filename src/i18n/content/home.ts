@@ -85,7 +85,7 @@ export function getHomeContent(locale: Locale, whatsappUrl: string): HomeContent
         name: ar ? "الاسم" : "Name", email: ar ? "البريد الإلكتروني" : "Email", rating: ar ? "التقييم بالنجوم" : "Star rating", message: ar ? "مراجعتك" : "Your review",
         submit: ar ? "إرسال المراجعة" : "Submit Review", submitting: ar ? "جارٍ الإرسال…" : "Submitting…",
         successTitle: ar ? "شكرًا لمشاركتك" : "Thank you for sharing",
-        successMessage: ar ? "استلمنا مراجعتك وستظهر بعد موافقة الإدارة." : "We received your review. It will appear after administrator approval.",
+        successMessage: ar ? "استلمنا مراجعتك." : "We received your review.",
         errorMessage: ar ? "تعذر إرسال المراجعة. راجع البيانات وحاول مرة أخرى." : "We could not submit your review. Check the details and try again.",
       },
     },

@@ -39,7 +39,7 @@ export default async function Home({ params }: Props) {
       <WhySocotra content={content.whySocotra}/>
       <FlightInformation content={content.flights}/>
       <GalleryPreview content={content.gallery} items={gallery}/>
-      <ReviewsSection content={content.reviews} summary={reviewData.summary} reviews={reviewData.reviews} locale={locale} labels={locale==="ar"?{outOfFive:"من أصل 5 نجوم",basedOn:"استنادًا إلى",reviews:"مراجعة",submittedBy:"تجربة ضيف معتمدة"}:{outOfFive:"out of 5 stars",basedOn:"Based on",reviews:"reviews",submittedBy:"Approved guest experience"}}/>
+      <ReviewsSection content={content.reviews} summary={reviewData.summary} reviews={reviewData.reviews} locale={locale} labels={locale==="ar"?{outOfFive:"من أصل 5 نجوم",basedOn:"استنادًا إلى",reviews:"مراجعة",submittedBy:""}:{outOfFive:"out of 5 stars",basedOn:"Based on",reviews:"reviews",submittedBy:""}}/>
       <CTASection content={content.finalCTA}/>
     </main>
   );
