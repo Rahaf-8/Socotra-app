@@ -147,7 +147,7 @@ export function getTourUI(locale: Locale) {
       practical: ar ? "ملاحظة عملية" : "Practical note",
       pricing: ar ? "الأسعار" : "Pricing",
       included: ar ? "ما تشمله الرحلة" : "What’s Included",
-      extras: ar ? "التكاليف الإضافية المطلوبة / غير المشمولة" : "Required Extras / Not Included",
+      extras: ar ? "التكاليف الإضافية المطلوبة (غير المشمولة)" : "Required Extras (Not Included)",
       extrasNote: ar ? "تستند الأسعار إلى المعلومات الحالية المقدمة من العميل وسيؤكدها فريق السفر أثناء الحجز." : "Prices are based on current client-provided information and will be confirmed by the travel team during booking.",
       itinerary: ar ? "برنامج الرحلة لمدة 8 أيام" : "8-Day Itinerary",
       day: ar ? "اليوم" : "Day",
