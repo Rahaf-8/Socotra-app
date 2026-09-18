@@ -20,7 +20,7 @@ export function getGalleryContent(locale: Locale): GalleryPageData {
     items: galleryPageData.items.map((item) => ({ ...item, title: "أشجار دم الأخوين", description: "أشجار دم الأخوين المميزة تنتشر على هضبة جزيرية صخرية فوق البحر.", altText: "أشجار دم الأخوين على هضبة سقطرية صخرية تطل على البحر." })),
     instagram: {
       eyebrow: "تابع الرحلة", title: "منشورات Instagram", description: "شاهد المزيد من لحظات رحلاتنا ومخيماتنا والحياة في أنحاء جزيرة سقطرى.", published: galleryPageData.instagram.published,
-      posts: galleryPageData.instagram.posts.map((post) => ({ ...post, altText: "معاينة مؤقتة لمنشور Instagram تظهر أشجار دم الأخوين على هضبة سقطرية صخرية.", caption: "معاينة مؤقتة لطريقة عرض صور Instagram المعتمدة." })),
+      posts: galleryPageData.instagram.posts.map((post) => ({ ...post, altText: "أشجار دم الأخوين على هضبة سقطرية صخرية.", caption: "أشجار دم الأخوين تنتشر عبر هضبة سقطرية صخرية." })),
     },
     cta: { title: "عِش تجربة سقطرى بنفسك", description: "استكشف رحلاتنا واكتشف المناظر التي تقف خلف هذه اللحظات.", primaryAction: { label: "استكشف رحلاتنا", href: localizedHref(locale, "/tours") }, secondaryAction: { label: "خطط لرحلتك", href: localizedHref(locale, "/booking") } },
     seo: { title: "معرض سقطرى | المناظر والحياة البرية ورحلات الجزيرة", description: "استكشف صور مناظر سقطرى وسواحلها ونباتاتها المميزة وحياتها البرية وثقافتها ورحلاتها التي لا تُنسى.", image: galleryPageData.seo.image },

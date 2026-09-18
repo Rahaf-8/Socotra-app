@@ -37,10 +37,8 @@ export const galleryPageData = {
       {
         id: "instagram-placeholder-dragons-blood-trees",
         imageUrl: socotraLandscapeImage,
-        altText:
-          "Temporary Instagram preview showing Dragon's Blood Trees on a rocky Socotra plateau.",
-        caption:
-          "A temporary preview of how approved Instagram photography will appear.",
+        altText: "Dragon's Blood Trees on a rocky Socotra plateau.",
+        caption: "Dragon's Blood Trees across a rocky Socotra plateau.",
         type: "image",
         displayOrder: 1,
         published: true,

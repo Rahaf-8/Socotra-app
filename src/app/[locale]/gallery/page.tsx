@@ -4,6 +4,7 @@ import { GalleryCTA } from "@/components/gallery/gallery-cta";
 import { GalleryGrid } from "@/components/gallery/gallery-grid";
 import { InstagramFeed } from "@/components/gallery/instagram-feed";
 import { Container } from "@/components/layout/container";
+import { PublicBackLink } from "@/components/layout/public-back-link";
 import { Section } from "@/components/layout/section";
 import { siteSettingsPlaceholder } from "@/config/site-settings";
 import { isLocale } from "@/i18n/config";
@@ -20,9 +21,9 @@ export default async function GalleryPage({ params }: PageProps<"/[locale]/galle
   const ui = getGalleryContent(locale), data = { ...ui, ...managed }, ar = locale === "ar";
   const categories = data.categories.filter((category) => category.published).sort((a, b) => a.displayOrder - b.displayOrder);
   return <main>
-    <section className="relative isolate overflow-hidden bg-charcoal pb-20 pt-36 text-white sm:pb-24 sm:pt-40 lg:pb-28"><div aria-hidden="true" className="absolute -end-24 top-0 size-[28rem] rounded-full bg-ocean/18 blur-3xl" /><Container className="relative"><p className="text-xs font-bold uppercase tracking-[0.24em] text-sand sm:text-sm">{data.hero.eyebrow}</p><h1 className="mt-5 max-w-[14ch] text-balance font-display text-[clamp(3rem,7vw,5.25rem)] font-semibold leading-[0.96]">{data.hero.title}</h1><p className="mt-6 max-w-2xl text-base leading-7 text-white/76 sm:text-lg sm:leading-8">{data.hero.description}</p></Container></section>
+    <section className="relative isolate overflow-hidden bg-charcoal pb-20 pt-36 text-white sm:pb-24 sm:pt-40 lg:pb-28"><div aria-hidden="true" className="absolute -end-24 top-0 size-[28rem] rounded-full bg-ocean/18 blur-3xl" /><Container className="relative"><PublicBackLink fallbackPath="/" className="mb-6"/><p className="text-xs font-bold uppercase tracking-[0.24em] text-sand sm:text-sm">{data.hero.eyebrow}</p><h1 className="mt-5 max-w-[14ch] text-balance font-display text-[clamp(3rem,7vw,5.25rem)] font-semibold leading-[0.96]">{data.hero.title}</h1><p className="mt-6 max-w-2xl text-base leading-7 text-white/76 sm:text-lg sm:leading-8">{data.hero.description}</p></Container></section>
     <Section aria-labelledby="curated-gallery-heading" className="bg-soft-sand"><Container><header className="mb-12 max-w-3xl lg:mb-16"><p className="text-xs font-bold uppercase tracking-[0.22em] text-ocean sm:text-sm">{ar ? "معرض منتقى" : "Curated Gallery"}</p><h2 id="curated-gallery-heading" className="mt-4 text-balance font-display text-[clamp(2.75rem,5vw,4.75rem)] font-semibold leading-[0.98] text-charcoal">{ar ? "حكاية بصرية عن سقطرى" : "A Visual Story of Socotra"}</h2><p className="mt-5 max-w-2xl text-base leading-8 text-charcoal/70 sm:text-lg">{ar ? "مجموعة متنامية من صور الجزيرة المعتمدة، مقدمة بسياق واضح ووصف يحترم المكان." : "A growing collection of approved island photography, presented with clear context and respectful descriptions."}</p></header><GalleryGrid items={data.items} categories={categories} categoryLabel={ar ? "الفئة" : "Category"} /></Container></Section>
-    <InstagramFeed content={data.instagram} profile={siteSettingsPlaceholder.instagram} labels={{ placeholder: ar ? "محتوى Instagram مؤقت · يتطلب موافقة العميل" : "Temporary Instagram content · Client approval required", follow: ar ? "تابعنا على Instagram" : "Follow on Instagram", image: dict.common.imagePost, video: dict.common.videoPost, carousel: dict.common.carouselPost, newTab: dict.common.externalNewTab }} />
+    <InstagramFeed content={data.instagram} profile={siteSettingsPlaceholder.instagram} labels={{ follow: ar ? "تابعنا على Instagram" : "Follow on Instagram", image: dict.common.imagePost, video: dict.common.videoPost, carousel: dict.common.carouselPost, newTab: dict.common.externalNewTab }} />
     <GalleryCTA content={data.cta} />
   </main>;
 }

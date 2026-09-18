@@ -104,7 +104,7 @@ export function getTours(locale: Locale): readonly Tour[] {
       ...translated,
       durationLabel: "8 أيام من الاكتشاف الكامل",
       practicalNote: "رحلة لا تُنسى عبر مناظر جزيرة سقطرى الساحرة، من أشجار دم الأخوين الشهيرة والكثبان الرملية العظيمة إلى الشواطئ البكر والكهوف والأودية والبحيرة الزرقاء الجميلة.",
-      featuredImage: { ...tour.featuredImage, alt: "صورة مؤقتة لمنظر طبيعي في سقطرى تظهر أشجار دم الأخوين على هضبة صخرية." },
+      featuredImage: { ...tour.featuredImage, alt: "منظر طبيعي في سقطرى يظهر أشجار دم الأخوين على هضبة صخرية." },
       pricingTiers: tour.pricingTiers?.map((tier) => ({
         ...tier,
         label: tier.minGuests === 2 ? "الأزواج" : tier.minGuests === 4 ? "4–5 أشخاص" : tier.minGuests === 6 ? "6–7 أشخاص" : "8 أشخاص أو أكثر",
@@ -129,7 +129,6 @@ export function getTourUI(locale: Locale) {
       eyebrow: ar ? "رحلاتنا" : "Our Tours",
       heading: ar ? "استكشف سقطرى بطريقتك" : "Explore Socotra Your Way",
       description: ar ? "قارن باقات سقطرى المتاحة واختر أسلوب السفر الأنسب لرحلتك." : "Compare the available Socotra packages and choose the travel style that best suits your journey.",
-      placeholderNotice: ar ? "صور مؤقتة للباقات · تتطلب موافقة العميل" : "Temporary package imagery · Client approval required",
       ctaHeading: ar ? "لست متأكدًا من الرحلة المناسبة لك؟" : "Not sure which tour is right for you?",
       plan: ar ? "خطط لرحلتك" : "Plan Your Trip",
       whatsapp: ar ? "تحدث عبر واتساب" : "Chat on WhatsApp",

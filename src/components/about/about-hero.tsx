@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { Container } from "@/components/layout/container";
+import { PublicBackLink } from "@/components/layout/public-back-link";
 import type { AboutHero as AboutHeroData } from "@/types/about";
 
 type AboutHeroProps = {
@@ -27,6 +28,7 @@ export function AboutHero({ content }: AboutHeroProps) {
       />
       <Container className="relative pb-16 pt-36 sm:pb-20 lg:pb-24">
         <div className="max-w-4xl">
+          <PublicBackLink fallbackPath="/" className="mb-6" />
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-sand sm:text-sm">
             {content.eyebrow}
           </p>

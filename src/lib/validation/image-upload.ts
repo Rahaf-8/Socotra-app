@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 export const MAX_IMAGE_UPLOAD_BYTES = 12 * 1024 * 1024;
-export const IMAGE_UPLOAD_CONTEXTS = ["gallery", "tour-hero", "tour-card", "tour-gallery", "itinerary"] as const;
+export const IMAGE_UPLOAD_CONTEXTS = ["gallery", "home-hero", "tour-hero", "tour-card", "tour-gallery", "itinerary"] as const;
 export const imageUploadContextSchema = z.enum(IMAGE_UPLOAD_CONTEXTS);
 export type ImageUploadContext = z.infer<typeof imageUploadContextSchema>;
 
-export const cloudinaryPublicIdSchema = z.string().trim().min(1).max(255).regex(/^socotra\/(?:gallery|tours\/(?:hero|cards|gallery|itinerary))\/[A-Za-z0-9_-]+$/);
+export const cloudinaryPublicIdSchema = z.string().trim().min(1).max(255).regex(/^socotra\/(?:gallery|home\/hero|tours\/(?:hero|cards|gallery|itinerary))\/[A-Za-z0-9_-]+$/);
 
 export function isSafeImageReference(value: string) {
   if (/^\/(?!\/)/.test(value)) {

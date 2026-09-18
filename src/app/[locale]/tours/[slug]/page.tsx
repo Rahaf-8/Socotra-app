@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { TourBookingCard } from "@/components/tours/tour-booking-card";
@@ -16,7 +14,7 @@ import { TourPricing } from "@/components/tours/tour-pricing";
 import { siteSettingsPlaceholder } from "@/config/site-settings";
 import { isLocale, locales } from "@/i18n/config";
 import { getTourUI } from "@/i18n/content/tours";
-import { bookingHref, languageAlternates, localizedHref } from "@/i18n/routing";
+import { bookingHref, languageAlternates } from "@/i18n/routing";
 import { getPublishedTourBySlug, getPublishedTours } from "@/lib/tours/tour-repository";
 
 type Props = { params: Promise<{ locale: string; slug: string }> };
@@ -59,7 +57,6 @@ export default async function TourPage({ params }: Props) {
                 <TourItineraryAccordion days={tour.itinerary} labels={{ heading: labels.itinerary, day: labels.day, overnight: labels.overnight, location: labels.location }} />
                 <TourGallery images={tour.galleryImages} heading={locale === "ar" ? "معرض الرحلة" : "Tour Gallery"} />
               </div>
-              <Link href={localizedHref(locale, "/tours")} className="mt-10 inline-flex min-h-11 items-center gap-2 rounded-full text-sm font-bold text-deep-ocean outline-none hover:text-ocean focus-visible:ring-2 focus-visible:ring-ocean"><ArrowLeft aria-hidden="true" className="size-4 rtl:rotate-180" />{labels.back}</Link>
             </div>
             <TourBookingCard tour={tour} bookingHref={book} whatsappHref={siteSettingsPlaceholder.contact.whatsappUrl} locale={locale} labels={{ duration: labels.duration, pricing: labels.pricing, from: labels.from, book: labels.bookTour, whatsapp: labels.whatsapp, reassurance: labels.reassurance }} />
           </div>

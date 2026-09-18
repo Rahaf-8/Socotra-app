@@ -6,6 +6,7 @@ import type { ImageUploadContext } from "@/lib/validation/image-upload";
 
 const folders: Record<ImageUploadContext, string> = {
   gallery: "socotra/gallery",
+  "home-hero": "socotra/home/hero",
   "tour-hero": "socotra/tours/hero",
   "tour-card": "socotra/tours/cards",
   "tour-gallery": "socotra/tours/gallery",

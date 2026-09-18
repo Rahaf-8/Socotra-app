@@ -3,6 +3,8 @@ import Link from "next/link";
 import { ArrowRight, MessageCircle } from "lucide-react";
 
 import { Container } from "@/components/layout/container";
+import { PublicBackLink } from "@/components/layout/public-back-link";
+import type { Locale } from "@/i18n/config";
 import { formatMoney, getLowestTourPrice } from "@/lib/tours/format-tour-price";
 import type { Tour } from "@/types/tour";
 
@@ -10,7 +12,7 @@ type TourDetailHeroProps = {
   tour: Tour;
   bookingHref: string;
   whatsappHref: string;
-  locale: string;
+  locale: Locale;
   labels: { from: string; perPerson: string; book: string; whatsapp: string };
 };
 
@@ -43,6 +45,7 @@ export function TourDetailHero({
       />
       <Container className="relative">
         <div className="max-w-4xl">
+          <PublicBackLink fallbackPath="/tours" className="mb-6" />
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-sand">
             {tour.packageLabel} · {tour.tourType}
           </p>

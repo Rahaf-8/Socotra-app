@@ -7,7 +7,7 @@ export const aboutPageData = {
     description:
       "An ancient island shaped by isolation, extraordinary biodiversity and a culture deeply connected to land and sea.",
     image: {
-      src: "/socotra-hero-placeholder.png",
+      src: "/andrew-svk-xr5kxyB9yxM-unsplash.jpg",
       alt: "Dragon's Blood Trees growing across a rocky Socotra plateau above the sea.",
     },
   },

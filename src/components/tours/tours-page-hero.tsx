@@ -1,10 +1,10 @@
 import { Container } from "@/components/layout/container";
+import { PublicBackLink } from "@/components/layout/public-back-link";
 
 export type ToursPageHeroContent = {
   eyebrow: string;
   heading: string;
   description: string;
-  placeholderNotice?: string;
 };
 
 type ToursPageHeroProps = {
@@ -12,13 +12,10 @@ type ToursPageHeroProps = {
 };
 
 export function ToursPageHero({ content }: ToursPageHeroProps) {
-  const showPlaceholderNotice =
-    process.env.NODE_ENV === "development" && content.placeholderNotice;
-
   return (
     <section
       aria-labelledby="tours-page-heading"
-      className="relative isolate overflow-hidden bg-charcoal pb-20 pt-36 text-white sm:pb-24 sm:pt-40 lg:pb-28 lg:pt-44"
+      className="relative isolate overflow-hidden bg-charcoal bg-cover bg-center pb-20 pt-36 text-white sm:pb-24 sm:pt-40 lg:pb-28 lg:pt-44"
     >
       <div
         aria-hidden="true"
@@ -31,6 +28,7 @@ export function ToursPageHero({ content }: ToursPageHeroProps) {
 
       <Container className="relative">
         <div className="max-w-4xl">
+          <PublicBackLink fallbackPath="/" className="mb-6" />
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-sand sm:text-sm">
             {content.eyebrow}
           </p>
@@ -43,11 +41,6 @@ export function ToursPageHero({ content }: ToursPageHeroProps) {
           <p className="mt-6 max-w-2xl text-base leading-7 text-white/76 sm:text-lg sm:leading-8">
             {content.description}
           </p>
-          {showPlaceholderNotice ? (
-            <p className="mt-5 inline-flex rounded-full border border-white/15 bg-white/8 px-3.5 py-2 text-xs font-semibold text-white/75">
-              {content.placeholderNotice}
-            </p>
-          ) : null}
         </div>
       </Container>
     </section>

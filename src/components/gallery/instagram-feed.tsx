@@ -10,7 +10,7 @@ import type { PublicSiteSettings } from "@/types/site-settings";
 type InstagramFeedProps = {
   content: GalleryPageData["instagram"];
   profile: PublicSiteSettings["instagram"];
-  labels: { placeholder: string; follow: string; image: string; video: string; carousel: string; newTab: string };
+  labels: { follow: string; image: string; video: string; carousel: string; newTab: string };
 };
 
 export function InstagramFeed({ content, profile, labels }: InstagramFeedProps) {
@@ -30,9 +30,6 @@ export function InstagramFeed({ content, profile, labels }: InstagramFeedProps) 
     return null;
   }
 
-  const showPlaceholderNotice =
-    process.env.NODE_ENV === "development" &&
-    posts.some((post) => post.placeholder);
   const showProfile =
     Boolean(profile.profileImage) ||
     Boolean(profile.username) ||
@@ -60,11 +57,6 @@ export function InstagramFeed({ content, profile, labels }: InstagramFeedProps) 
           {content.description ? (
             <p className="mt-4 max-w-xl text-sm leading-7 text-white/68 sm:text-base">
               {content.description}
-            </p>
-          ) : null}
-          {showPlaceholderNotice ? (
-            <p className="mt-4 inline-flex rounded-full border border-white/15 bg-white/8 px-3.5 py-2 text-xs font-semibold text-white/70">
-              {labels.placeholder}
             </p>
           ) : null}
         </header>

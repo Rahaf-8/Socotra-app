@@ -1,4 +1,5 @@
 import { Container } from "@/components/layout/container";
+import { PublicBackLink } from "@/components/layout/public-back-link";
 import type { ContactPageData } from "@/types/contact";
 
 type ContactHeroProps = {
@@ -16,6 +17,7 @@ export function ContactHero({ content }: ContactHeroProps) {
         className="absolute -right-24 top-0 size-[28rem] rounded-full bg-ocean/18 blur-3xl"
       />
       <Container className="relative">
+        <PublicBackLink fallbackPath="/" className="mb-6" />
         <p className="text-xs font-bold uppercase tracking-[0.24em] text-sand sm:text-sm">
           {content.eyebrow}
         </p>

@@ -15,6 +15,7 @@ import { languageAlternates } from "@/i18n/routing";
 import { getPublishedTours } from "@/lib/tours/tour-repository";
 import { getPublishedGalleryContent } from "@/lib/gallery/gallery-repository";
 import { getApprovedReviews } from "@/lib/reviews/review-repository";
+import { getHomeHeroImage } from "@/lib/content/home-settings";
 
 type Props = { params: Promise<{ locale: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -28,13 +29,13 @@ export default async function Home({ params }: Props) {
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   const content = getHomeContent(locale, siteSettingsPlaceholder.contact.whatsappUrl);
-  const tours = (await getPublishedTours(locale)).filter((tour) => tour.featured);
+  const [heroImage, publishedTours, publishedGallery, reviewData] = await Promise.all([getHomeHeroImage(), getPublishedTours(locale), getPublishedGalleryContent(locale), getApprovedReviews(locale)]);
+  const tours = publishedTours.filter((tour) => tour.featured);
   const labels = getTourUI(locale).labels;
-  const gallery = (await getPublishedGalleryContent(locale)).items.filter((item) => item.featured).slice(0,6);
-  const reviewData = await getApprovedReviews(locale);
+  const gallery = publishedGallery.items.filter((item) => item.featured).slice(0,6);
   return (
     <main>
-      <Hero content={content.hero}/>
+      <Hero content={{ ...content.hero, image: { ...content.hero.image, src: heroImage.imagePath } }}/>
       <FeaturedTours content={content.featuredTours} tours={tours} locale={locale} labels={{view:labels.viewTour,from:labels.from,perPerson:labels.perPerson,contactPricing:labels.contactPricing}}/>
       <WhySocotra content={content.whySocotra}/>
       <FlightInformation content={content.flights}/>

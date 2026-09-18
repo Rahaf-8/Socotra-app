@@ -7,7 +7,7 @@ import type {
 
 const image: TourImage = {
   src: "/socotra-hero-placeholder.png",
-  alt: "Temporary Socotra landscape image showing Dragon Blood Trees on a rugged plateau.",
+  alt: "Socotra landscape showing Dragon Blood Trees on a rugged plateau.",
 };
 
 const campingIncluded = [

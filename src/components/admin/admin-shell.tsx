@@ -13,6 +13,7 @@ const adminNavigation = [
   { href: "/admin/booking-requests", label: "Booking Requests" },
   { href: "/admin/contact-requests", label: "Contact Requests" },
   { href: "/admin/reviews", label: "Reviews" },
+  { href: "/admin/home", label: "Home" },
   { href: "/admin/tours", label: "Tours" },
   { href: "/admin/faq", label: "FAQ" },
   { href: "/admin/about", label: "About" },

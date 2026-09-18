@@ -15,7 +15,6 @@ export type GalleryPreviewContent = {
     label: string;
     href: string;
   };
-  placeholderNotice?: string;
 };
 
 type GalleryPreviewProps = {
@@ -40,9 +39,6 @@ export function GalleryPreview({ content, items }: GalleryPreviewProps) {
   const visibleItems = [...items]
     .sort((a, b) => a.displayOrder - b.displayOrder)
     .slice(0, 6);
-  const showPlaceholderNotice =
-    process.env.NODE_ENV === "development" && content.placeholderNotice;
-
   return (
     <Section
       aria-labelledby="gallery-preview-heading"
@@ -62,11 +58,6 @@ export function GalleryPreview({ content, items }: GalleryPreviewProps) {
           <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-charcoal/72 sm:text-lg sm:leading-8">
             {content.description}
           </p>
-          {showPlaceholderNotice ? (
-            <p className="mt-5 inline-flex rounded-full border border-ocean/15 bg-soft-sand px-3.5 py-2 text-xs font-semibold text-deep-ocean">
-              {content.placeholderNotice}
-            </p>
-          ) : null}
         </div>
 
         {visibleItems.length > 0 ? (

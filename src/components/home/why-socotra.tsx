@@ -16,7 +16,6 @@ export type WhySocotraContent = {
   eyebrow: string;
   heading: string;
   description: string;
-  placeholderNotice: string;
   features: readonly {
     title: string;
     description: string;
@@ -45,9 +44,6 @@ export function WhySocotra({ content }: WhySocotraProps) {
             </h2>
             <p className="mt-6 max-w-xl text-base leading-7 text-charcoal/72 sm:text-lg sm:leading-8">
               {content.description}
-            </p>
-            <p className="mt-6 inline-flex rounded-full border border-ocean/15 bg-soft-sand px-3.5 py-2 text-xs font-semibold text-deep-ocean">
-              {content.placeholderNotice}
             </p>
           </div>
 

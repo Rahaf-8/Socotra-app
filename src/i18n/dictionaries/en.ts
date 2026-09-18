@@ -11,7 +11,6 @@ export const en = {
     exploreTours: "Explore Tours", planTrip: "Plan Your Trip", viewTour: "View Tour",
     bookTour: "Book This Tour", whatsapp: "WhatsApp", backTours: "Back to All Tours",
     from: "From", perPerson: "per person", contactPricing: "Contact for Dates & Pricing",
-    clientApproval: "Temporary development content · Client approval required",
     externalNewTab: "opens in a new tab", loadMore: "Load More", close: "Close",
     previous: "Previous", next: "Next", imagePost: "Image post", videoPost: "Video post",
     carouselPost: "Carousel post",

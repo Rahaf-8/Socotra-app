@@ -16,7 +16,6 @@ export type FeaturedToursContent = {
     label: string;
     href: string;
   };
-  placeholderNotice: string;
 };
 
 type FeaturedToursProps = {
@@ -46,9 +45,6 @@ export function FeaturedTours({ content, tours, locale, labels }: FeaturedToursP
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-charcoal/72 sm:text-lg sm:leading-8">
               {content.description}
-            </p>
-            <p className="mt-4 inline-flex rounded-full border border-ocean/15 bg-white/70 px-3.5 py-2 text-xs font-semibold text-deep-ocean">
-              {content.placeholderNotice}
             </p>
           </div>
 

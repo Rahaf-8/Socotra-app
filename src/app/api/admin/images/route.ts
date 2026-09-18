@@ -8,6 +8,18 @@ export const runtime = "nodejs";
 
 const json = (body: object, status: number) => Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
 
+export async function GET() {
+  const admin = await getCurrentAdmin();
+  if (!admin) return json({ ok: false, error: "Administrator authentication is required." }, 401);
+  if (admin.mustChangePassword) return json({ ok: false, error: "Change your administrator password before managing images." }, 403);
+  const assets = await prisma.cloudinaryAsset.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 100,
+    select: { publicId: true, secureUrl: true, context: true, createdAt: true },
+  });
+  return json({ ok: true, assets }, 200);
+}
+
 export async function POST(request: Request) {
   const admin = await getCurrentAdmin();
   if (!admin) return json({ ok: false, error: "Administrator authentication is required." }, 401);

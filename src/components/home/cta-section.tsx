@@ -21,7 +21,6 @@ export type CTASectionContent = {
   backgroundImage?: {
     src: string;
   };
-  placeholderNotice?: string;
 };
 
 type CTASectionProps = {
@@ -32,9 +31,6 @@ export function CTASection({ content }: CTASectionProps) {
   if (!content.enabled) {
     return null;
   }
-
-  const showPlaceholderNotice =
-    process.env.NODE_ENV === "development" && content.placeholderNotice;
 
   return (
     <Section
@@ -74,12 +70,6 @@ export function CTASection({ content }: CTASectionProps) {
           <p className="mx-auto mt-7 max-w-2xl text-base leading-7 text-white/78 sm:text-lg sm:leading-8">
             {content.description}
           </p>
-
-          {showPlaceholderNotice ? (
-            <p className="mt-5 inline-flex rounded-full border border-white/15 bg-white/8 px-3.5 py-2 text-xs font-semibold text-white/75 backdrop-blur-sm">
-              {content.placeholderNotice}
-            </p>
-          ) : null}
 
           <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
             <Link

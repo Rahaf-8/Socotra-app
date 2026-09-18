@@ -13,7 +13,6 @@ export const ar = {
     exploreTours: "استكشف الرحلات", planTrip: "خطط لرحلتك", viewTour: "عرض الرحلة",
     bookTour: "احجز هذه الرحلة", whatsapp: "واتساب", backTours: "العودة إلى جميع الرحلات",
     from: "ابتداءً من", perPerson: "للشخص", contactPricing: "تواصل معنا لمعرفة المواعيد والأسعار",
-    clientApproval: "محتوى تطوير مؤقت · يتطلب موافقة العميل",
     externalNewTab: "يفتح في علامة تبويب جديدة", loadMore: "عرض المزيد", close: "إغلاق",
     previous: "السابق", next: "التالي", imagePost: "منشور صورة", videoPost: "منشور فيديو",
     carouselPost: "منشور متعدد الصور",

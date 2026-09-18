@@ -29,7 +29,6 @@ export type FlightInformationContent = {
   supportingNote: string;
   primaryAction: FlightInformationAction;
   secondaryAction: FlightInformationAction;
-  placeholderNotice?: string;
 };
 
 type FlightInformationProps = {
@@ -40,9 +39,6 @@ export function FlightInformation({ content }: FlightInformationProps) {
   if (!content.enabled) {
     return null;
   }
-
-  const showPlaceholderNotice =
-    process.env.NODE_ENV === "development" && content.placeholderNotice;
 
   return (
     <Section
@@ -73,12 +69,6 @@ export function FlightInformation({ content }: FlightInformationProps) {
             <p className="mt-6 max-w-2xl text-base leading-7 text-white/72 sm:text-lg sm:leading-8">
               {content.description}
             </p>
-
-            {showPlaceholderNotice ? (
-              <p className="mt-5 w-fit rounded-full border border-white/15 bg-white/5 px-3.5 py-2 text-xs font-semibold text-white/75">
-                {content.placeholderNotice}
-              </p>
-            ) : null}
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
